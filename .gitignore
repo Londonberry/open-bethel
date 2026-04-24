@@ -1,0 +1,28 @@
+# Local Claude Code state & project-specific instructions
+.claude/
+CLAUDE.md
+
+# BMAD Method scaffolding & planning artifacts — internal, not product code
+_bmad/
+_bmad-output/
+
+# Academic paper (kept locally for reference; not redistributed here)
+docs/BethelRank.pdf
+
+# Editors / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Python (for when implementation starts)
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+dist/
+build/
