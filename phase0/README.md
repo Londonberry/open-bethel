@@ -5,7 +5,8 @@ A single-file reference implementation of the two ranking methods at the core of
 ## Run it
 
 ```
-python3 phase0/phase0.py
+python3 phase0/phase0.py              # rankings on the included sample
+python3 phase0/validate.py            # predictive-accuracy harness
 ```
 
 No dependencies beyond the Python standard library. Tested on Python 3.10+.
@@ -49,9 +50,15 @@ Pairwise connectivity
   ...
 ```
 
+## Validation harness
+
+`validate.py` splits the CSV at a date cutoff, trains each ranking method on games before the cutoff, and scores each method's predicted win probability against the actual outcomes of games from the cutoff onward. Metrics: accuracy, log-loss, and Brier score, against three baselines (Bethel, classical RPI, Laplace-smoothed win-percentage Bradley-Terry, and a 50/50 coin). Usage: `python3 phase0/validate.py [csv] [YYYY-MM-DD cutoff]`.
+
+The harness scaffolding is complete; the held-out set on the current sample (22–54 games depending on cutoff) is too small to draw firm conclusions. What it does demonstrate is where the current data scale breaks calibration: rating-as-probability conversions blow up when a team has very few training games, which is exactly the sparse-graph regime a district-scoped dataset lives in. Expanding to a full state-or-class dataset is what makes this benchmark meaningful.
+
 ## What this phase does NOT do
 
 - No public website, no UI — that's Phase 2+.
-- No predictive-accuracy benchmark against held-out games — that's a separate validation track.
 - No side-by-side comparison with a state-published ranking — that requires scraping the published feed, which is a separate problem (and, for the FHSAA feed, one that is deliberately not solved inside this project).
 - No per-game contribution export or pairwise-explanation UI — those are downstream features that sit on top of the core math proven out here.
+- No home/away adjustment — the paper flags it as future work (§8); all methods here predict neutral-site.
