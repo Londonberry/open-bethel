@@ -15,7 +15,7 @@ open-bethel is an effort to change that — by specifying the ranking math in th
 
 ## The method
 
-The ranking engine is built on Roy Bethel's 2005 paper *An Optimal Value for the Bradley-Terry Model for Estimating Strength-of-Schedule*, which derives a maximum-likelihood strength rating via iterative updates over head-to-head results. It is the academic foundation that a family of modern commercial ranking systems trace back to — but unlike those systems, Bethel's method is published, peer-reviewed, and free for anyone to implement.
+The ranking engine is built on Roy Bethel's 2005 paper *[An Optimal Value for the Bradley-Terry Model for Estimating Strength-of-Schedule](https://fliphtml5.com/sdyu/suvz/basic)*, which derives a maximum-likelihood strength rating via iterative updates over head-to-head results. It is the academic foundation that a family of modern commercial ranking systems trace back to — but unlike those systems, Bethel's method is published, peer-reviewed, and free for anyone to implement.
 
 For the algorithmic core we're implementing, see [`docs/bethel-essence.md`](docs/bethel-essence.md).
 
