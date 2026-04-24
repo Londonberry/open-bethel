@@ -15,7 +15,7 @@ docs/BethelRank.pdf
 .vscode/
 *.swp
 
-# Python (for when implementation starts)
+# Python
 __pycache__/
 *.py[cod]
 *.egg-info/
@@ -26,3 +26,4 @@ venv/
 .ruff_cache/
 dist/
 build/
+src/*.egg-info/

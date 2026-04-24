@@ -21,7 +21,16 @@ For the algorithmic core we're implementing, see [`docs/bethel-essence.md`](docs
 
 ## Status
 
-Early. A working reference implementation lives in [`phase0/`](phase0/) — 122 games of real 2026 FHSAA Class 2A Region 1 District 3 baseball data, classical RPI and Bethel-method rankings, and a pairwise connectivity diagnostic, in ~200 lines of dependency-free Python you can run with `python3 phase0/phase0.py`.
+Early, but with running code. The ranking engine ships as the `open_bethel` Python package (dependency-free, standard library only):
+
+```
+pip install -e .
+open-bethel-rank    phase0/games-fhsaa-fl-2026.csv  episcopal-eagles  bolles-bulldogs
+open-bethel-validate phase0/games-fhsaa-fl-2026.csv  2026-04-01
+python3 phase1/contributions_demo.py  phase0/games-fhsaa-fl-2026.csv  episcopal-eagles
+```
+
+Current benchmark: on a 5,089-game statewide graph of 2026 Florida high school baseball, the method produces predictions that beat every tested baseline at every cutoff, with the best log-loss of any method. Full writeup in [`docs/phase0-findings.md`](docs/phase0-findings.md).
 
 The v1 target is Florida high school baseball across all eight FHSAA classifications: classical RPI, an open Bradley-Terry-Ford implementation of Bethel's method, and one independent predictive rating running side by side on the same input data, with per-game contributions and pairwise comparisons exposed in a public website and a pip-installable Python package.
 
