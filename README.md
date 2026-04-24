@@ -21,7 +21,13 @@ For the algorithmic core we're implementing, see [`docs/bethel-essence.md`](docs
 
 ## Status
 
-Early — planning phase. The v1 target is Florida high school baseball across all eight FHSAA classifications: classical RPI, an open Bradley-Terry-Ford implementation of Bethel's method, and one independent predictive rating running side by side on the same input data, with per-game contributions and pairwise comparisons exposed in a public website and a pip-installable Python package.
+Early. A working reference implementation lives in [`phase0/`](phase0/) — 122 games of real 2026 FHSAA Class 2A Region 1 District 3 baseball data, classical RPI and Bethel-method rankings, and a pairwise connectivity diagnostic, in ~200 lines of dependency-free Python you can run with `python3 phase0/phase0.py`.
+
+The v1 target is Florida high school baseball across all eight FHSAA classifications: classical RPI, an open Bradley-Terry-Ford implementation of Bethel's method, and one independent predictive rating running side by side on the same input data, with per-game contributions and pairwise comparisons exposed in a public website and a pip-installable Python package.
+
+## Data model
+
+open-bethel is data-source-agnostic. The engine consumes a generic game list (CSV today, pluggable database adapters later) with one row per game: date, home team, away team, home score, away score. How that data gets collected — state-association exports, league scoring apps, hand entry, a user's own scraper — is the user's problem. Keeping ingest out of the core is what lets the project stay legally clean, adoptable across states and sports, and useful to anyone who already has game data in any format.
 
 ## Why the name
 
