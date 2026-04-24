@@ -133,8 +133,14 @@ def main() -> None:
     print(f"  {len(games)} games, {len(teams)} teams")
 
     print("Computing Bethel strengths …", flush=True)
-    strengths, iters = bethel_strengths(teams, games)
-    print(f"  converged in {iters} iterations")
+    strengths, iters, converged = bethel_strengths(teams, games)
+    status = f"converged in {iters} iterations" if converged else f"DID NOT CONVERGE — stopped at max_iter={iters}"
+    print(f"  {status}")
+    if not converged:
+        raise RuntimeError(
+            "Refusing to build site data from a non-converged solver. "
+            "Increase max_iter or relax tol in site/build.py."
+        )
 
     print("Computing classical RPI …", flush=True)
     rpi = classical_rpi(teams, games)

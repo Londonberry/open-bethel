@@ -30,6 +30,7 @@ Repository = "https://github.com/Londonberry/open-bethel"
 [project.scripts]
 open-bethel-rank = "open_bethel.cli:main_rank"
 open-bethel-validate = "open_bethel.cli:main_validate"
+open-bethel-diagnose = "open_bethel.cli:main_diagnose"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/open_bethel"]

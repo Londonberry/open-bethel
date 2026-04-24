@@ -13,7 +13,8 @@ def test_symmetric_two_teams_have_equal_strength() -> None:
     """Round-robin between two teams → equal strengths with the anchor prior."""
     teams = ["a", "b"]
     games = [("a", "b"), ("b", "a")]
-    s, _ = bethel_strengths(teams, games)
+    s, _, converged = bethel_strengths(teams, games)
+    assert converged
     assert abs(s["a"] - s["b"]) < 1e-8
     assert abs(s["a"] * s["b"] - 1.0) < 1e-8  # geometric mean = 1
 
@@ -22,7 +23,8 @@ def test_undefeated_team_does_not_diverge() -> None:
     """With the Bayesian prior, an undefeated team has a bounded strength."""
     teams = ["a", "b", "c"]
     games = [("a", "b"), ("a", "c"), ("a", "b"), ("a", "c")]
-    s, _ = bethel_strengths(teams, games)
+    s, _, converged = bethel_strengths(teams, games)
+    assert converged
     assert math.isfinite(s["a"])
     assert s["a"] > s["b"]
     assert s["a"] > s["c"]
@@ -35,8 +37,27 @@ def test_bethel_converges_quickly_on_small_input() -> None:
         ("b", "c"), ("b", "d"),
         ("c", "d"),
     ]
-    _, iters = bethel_strengths(teams, games, tol=1e-10)
+    _, iters, converged = bethel_strengths(teams, games, tol=1e-10)
+    assert converged
     assert iters < 100
+
+
+def test_bethel_flags_non_convergence() -> None:
+    """A too-small max_iter must return converged=False rather than lie."""
+    import warnings
+    teams = ["a", "b", "c", "d"]
+    games = [
+        ("a", "b"), ("a", "c"), ("a", "d"),
+        ("b", "c"), ("b", "d"),
+        ("c", "d"),
+    ]
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        _, iters, converged = bethel_strengths(
+            teams, games, max_iter=2, tol=1e-10
+        )
+    assert iters == 2
+    assert converged is False
 
 
 def test_rpi_components_sum_correctly() -> None:

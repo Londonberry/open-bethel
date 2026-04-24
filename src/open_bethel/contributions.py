@@ -62,7 +62,7 @@ def loo_contributions(
     games appeared in `games`.
     """
     if baseline_strengths is None:
-        baseline_strengths, _ = bethel_strengths(teams, games, max_iter=max_iter, tol=tol)
+        baseline_strengths, _, _ = bethel_strengths(teams, games, max_iter=max_iter, tol=tol)
 
     s_with = baseline_strengths[target_team]
     results: list[Contribution] = []
@@ -71,12 +71,13 @@ def loo_contributions(
         if w != target_team and l != target_team:
             continue
         without_games = games[:i] + games[i + 1 :]
-        s_without, _ = bethel_strengths(
+        s_without, _, _ = bethel_strengths(
             teams,
             without_games,
             max_iter=max_iter,
             tol=tol,
             initial=baseline_strengths,
+            warn_non_convergence=False,
         )
         results.append(
             Contribution(

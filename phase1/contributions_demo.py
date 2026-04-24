@@ -33,8 +33,9 @@ def main(argv: list[str]) -> int:
     print(f"Target: {target}")
     print(f"Dataset: {csv_path.name}  ({len(games)} games, {len(teams)} teams)")
     print("Computing baseline strengths …", flush=True)
-    baseline, iters = bethel_strengths(teams, games)
-    print(f"  converged in {iters} iterations")
+    baseline, iters, converged = bethel_strengths(teams, games)
+    status = f"converged in {iters} iterations" if converged else f"DID NOT CONVERGE — stopped at max_iter={iters}"
+    print(f"  {status}")
     print("Computing leave-one-out contributions …", flush=True)
     contribs = loo_contributions(teams, games, target, baseline_strengths=baseline)
 

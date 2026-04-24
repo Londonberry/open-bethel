@@ -32,7 +32,9 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
+sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 from phase0 import bethel_strengths, classical_rpi  # noqa: E402
+from open_bethel.calibration import fit_logistic  # noqa: E402
 
 DEFAULT_CSV = Path(__file__).parent / "games-district-3-2a-2026.csv"
 DEFAULT_CUTOFF = "2026-04-01"
@@ -91,11 +93,42 @@ def predict_bethel(strengths: dict[str, float], home: str, away: str) -> float:
     return s_h / (s_h + s_a)
 
 
-def predict_rpi(rpi_data: dict[str, dict[str, float]], home: str, away: str) -> float:
-    r_h = rpi_data.get(home, {"rpi": 0.0})["rpi"]
-    r_a = rpi_data.get(away, {"rpi": 0.0})["rpi"]
-    total = r_h + r_a
-    return r_h / total if total > 0 else 0.5
+def _rpi_or_none(rpi_data, team):
+    r = rpi_data.get(team, {"rpi": 0.0})["rpi"]
+    return r if r > 0 else None
+
+
+def predict_rpi(rpi_data, home, away):
+    """Raw, uncalibrated RPI probability."""
+    r_h = _rpi_or_none(rpi_data, home)
+    r_a = _rpi_or_none(rpi_data, away)
+    if r_h is None or r_a is None:
+        return 0.5
+    return r_h / (r_h + r_a)
+
+
+def _rpi_log_ratio(rpi_data, home, away):
+    eps = 1e-6
+    r_h = max(rpi_data.get(home, {"rpi": 0.0})["rpi"], eps)
+    r_a = max(rpi_data.get(away, {"rpi": 0.0})["rpi"], eps)
+    return math.log(r_h / r_a)
+
+
+def fit_rpi_calibration(rpi_data, train_games):
+    """Fit logistic on log(rpi_w/rpi_l) → P(winner wins), symmetrized."""
+    xs, ys = [], []
+    for w, l in train_games:
+        xs.append(_rpi_log_ratio(rpi_data, w, l))
+        ys.append(1)
+        xs.append(_rpi_log_ratio(rpi_data, l, w))
+        ys.append(0)
+    return fit_logistic(xs, ys)
+
+
+def predict_rpi_calibrated(rpi_data, calibration, home, away):
+    if _rpi_or_none(rpi_data, home) is None or _rpi_or_none(rpi_data, away) is None:
+        return 0.5
+    return calibration.predict(_rpi_log_ratio(rpi_data, home, away))
 
 
 def predict_wp(record: dict[str, dict[str, int]], home: str, away: str) -> float:
@@ -139,12 +172,14 @@ def main(csv_path: Path, cutoff: str) -> None:
 
     strengths, iters = bethel_strengths(teams, train)
     rpi_data = classical_rpi(teams, train)
+    rpi_cal = fit_rpi_calibration(rpi_data, train)
 
     preds = {
-        "bethel": [predict_bethel(strengths, h, a) for h, a, _ in test],
-        "rpi":    [predict_rpi(rpi_data, h, a) for h, a, _ in test],
-        "wp":     [predict_wp(record_pre, h, a) for h, a, _ in test],
-        "coin":   [0.5 for _ in test],
+        "bethel":  [predict_bethel(strengths, h, a) for h, a, _ in test],
+        "rpi_raw": [predict_rpi(rpi_data, h, a) for h, a, _ in test],
+        "rpi_cal": [predict_rpi_calibrated(rpi_data, rpi_cal, h, a) for h, a, _ in test],
+        "wp":      [predict_wp(record_pre, h, a) for h, a, _ in test],
+        "coin":    [0.5 for _ in test],
     }
     actuals = [y for _, _, y in test]
 
@@ -159,7 +194,7 @@ def main(csv_path: Path, cutoff: str) -> None:
     baseline_ll = score(preds["coin"], actuals)[1]
     print()
     print("Improvement over 50/50 coin baseline (log-loss reduction):")
-    for name in ("bethel", "rpi", "wp"):
+    for name in ("bethel", "rpi_raw", "rpi_cal", "wp"):
         _, ll, _ = score(preds[name], actuals)
         delta = baseline_ll - ll
         pct = (delta / baseline_ll) * 100 if baseline_ll > 0 else 0

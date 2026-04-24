@@ -6,9 +6,10 @@ from pathlib import Path
 
 from .bethel import bethel_strengths
 from .connectivity import indirection
+from .diagnostics import home_field_advantage
 from .io import load_games
 from .rpi import classical_rpi
-from .validation import validate
+from .validation import validate, validate_with_ci
 
 
 def _fmt_focus_row(rank: int, team: str, w: int, l: int, s: float, r: float, wp_: float) -> str:
@@ -27,7 +28,7 @@ def main_rank(argv: list[str] | None = None) -> int:
     teams, games = load_games(csv_path)
     print(f"Loaded {len(games)} games across {len(teams)} teams from {csv_path.name}\n")
 
-    strengths, iters = bethel_strengths(teams, games)
+    strengths, iters, converged = bethel_strengths(teams, games)
     rpi = classical_rpi(teams, games)
 
     team_set = set(teams)
@@ -43,7 +44,8 @@ def main_rank(argv: list[str] | None = None) -> int:
         rows.append((t, w, l, strengths[t], rpi[t]["rpi"], rpi[t]["wp"]))
 
     by_bethel = sorted(rows, key=lambda r: -r[3])
-    print(f"Bethel strengths (converged in {iters} iterations)")
+    status = f"converged in {iters} iterations" if converged else f"DID NOT CONVERGE — stopped at max_iter={iters}"
+    print(f"Bethel strengths ({status})")
     print(f"{'rank':<5}{'team':<40}{'W-L':<8}{'strength':>10}{'rpi':>10}{'wp':>8}")
     for rank, row in enumerate(by_bethel, 1):
         print(_fmt_focus_row(rank, *row))
@@ -63,15 +65,69 @@ def main_validate(argv: list[str] | None = None) -> int:
     """Run the train/test validation harness at a given date cutoff."""
     args = argv if argv is not None else sys.argv[1:]
     if len(args) < 2:
-        print("usage: open-bethel-validate <games.csv> <YYYY-MM-DD cutoff>", file=sys.stderr)
+        print(
+            "usage: open-bethel-validate <games.csv> <YYYY-MM-DD cutoff> [n_boot]",
+            file=sys.stderr,
+        )
         return 1
     csv_path, cutoff = args[0], args[1]
-    scores = validate(csv_path, cutoff)
+    n_boot = int(args[2]) if len(args) > 2 else 1000
 
-    print(f"cutoff={cutoff}")
-    print(f"{'method':<12}{'accuracy':>10}{'log-loss':>12}{'brier':>10}")
-    for name, s in scores.items():
-        print(f"{name:<12}{s.accuracy:>10.3f}{s.log_loss:>12.4f}{s.brier:>10.4f}")
+    cis, pairwise = validate_with_ci(csv_path, cutoff, n_boot=n_boot)
+
+    print(f"cutoff={cutoff}   bootstrap n={n_boot}   95% percentile CIs")
+    print()
+    print(f"{'method':<10}{'accuracy':>22}{'log-loss':>24}{'brier':>24}")
+    print("-" * 80)
+    for name, ci in cis.items():
+        print(
+            f"{name:<10}"
+            f"  {ci.accuracy.point:.3f} [{ci.accuracy.low:.3f},{ci.accuracy.high:.3f}]"
+            f"  {ci.log_loss.point:.4f} [{ci.log_loss.low:.4f},{ci.log_loss.high:.4f}]"
+            f"  {ci.brier.point:.4f} [{ci.brier.low:.4f},{ci.brier.high:.4f}]"
+        )
+
+    if pairwise:
+        print()
+        print("Paired bootstrap vs Bethel (positive Δ = method has HIGHER log-loss, i.e. Bethel wins)")
+        print(f"{'method':<10}  {'Δ log-loss (method − bethel) [95% CI]':<42}  {'P(Bethel ≥ method)':>18}")
+        print("-" * 78)
+        for m, diffs in pairwise.items():
+            ll = diffs["log_loss"]
+            cell = f"{ll.mean_diff:+.4f} [{ll.low:+.4f}, {ll.high:+.4f}]"
+            print(f"{m:<10}  {cell:<42}  {ll.p_baseline_at_least_as_good:>18.3f}")
+    return 0
+
+
+def main_diagnose(argv: list[str] | None = None) -> int:
+    """Run dataset-level diagnostics (currently: home-field advantage)."""
+    args = argv if argv is not None else sys.argv[1:]
+    if not args:
+        print("usage: open-bethel-diagnose <games.csv>", file=sys.stderr)
+        return 1
+    csv_path = Path(args[0])
+    report = home_field_advantage(csv_path)
+    print(report)
+    p = report.home_win_rate
+    if p != p:  # NaN
+        return 0
+    if report.ci_low > 0.5:
+        print(
+            f"  → 95% CI entirely above 0.5: statistically significant home-field effect."
+        )
+        print(
+            "    Bethel's model excludes home/away (§3, §8). On this dataset the"
+            " exclusion biases every ranking."
+        )
+    elif report.ci_high < 0.5:
+        print(
+            f"  → 95% CI entirely below 0.5: statistically significant ROAD-field effect."
+        )
+    else:
+        print(
+            f"  → 95% CI contains 0.5: no statistically significant home-field effect"
+            " at n={}.".format(report.decided_games)
+        )
     return 0
 
 
