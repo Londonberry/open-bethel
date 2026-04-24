@@ -213,6 +213,12 @@ function route() {
   markActiveNav();
   scrollToTop();
 
+  if (window.goatcounter && window.goatcounter.count) {
+    window.goatcounter.count({
+      path: location.pathname + location.search + location.hash,
+    });
+  }
+
   if (parts.length === 0) return renderIndex();
   if (parts[0] === "team" && parts[1]) return renderTeam(decodeURIComponent(parts[1]));
   if (parts[0] === "compare") {
