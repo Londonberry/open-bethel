@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import csv
 import json
+import math
 import sys
 import time
 from collections import defaultdict
@@ -172,6 +173,15 @@ def main() -> None:
     )
     for i, r in enumerate(rankings, 1):
         r["rank"] = i
+
+    # Normalized strength: log-compresses the unbounded raw Bethel onto a
+    # bounded scale so the top team lands at NORM_TOP. Order is preserved
+    # (transform is monotonic). Anchored to the raw maximum.
+    NORM_TOP = 20.0
+    max_bethel = rankings[0]["bethel"] if rankings else 0.0
+    norm_scale = NORM_TOP / math.log1p(max_bethel) if max_bethel > 0 else 1.0
+    for r in rankings:
+        r["bethel_norm"] = round(norm_scale * math.log1p(r["bethel"]), 4)
 
     # Contributions: expensive. Compute for FHSAA 2A teams (priority audience)
     # plus the top 20 by Bethel strength (likely state-level prominent teams).

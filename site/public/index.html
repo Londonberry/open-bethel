@@ -74,6 +74,10 @@
         <input id="f-2a" type="checkbox">
         <label for="f-2a">FHSAA Class 2A only</label>
       </div>
+      <div class="control-group control-toggle">
+        <input id="f-norm" type="checkbox" checked>
+        <label for="f-norm">Normalize strength (0–20)</label>
+      </div>
       <div class="control-group control-range">
         <label for="f-min">Min. games <span class="val" id="f-min-val">0</span></label>
         <input id="f-min" type="range" min="0" max="30" step="1" value="0">
@@ -88,7 +92,7 @@
             <th class="col-rank" data-sort="rank" scope="col"><span>#</span></th>
             <th class="col-team" data-sort="team" scope="col"><span>Team</span></th>
             <th class="col-record" data-sort="wp" scope="col"><span>Record</span></th>
-            <th class="col-bethel is-active" data-sort="bethel" scope="col"><span>Bethel</span></th>
+            <th class="col-bethel is-active" data-sort="bethel" scope="col"><span id="th-bethel-label">Bethel</span></th>
             <th class="col-rpi" data-sort="rpi" scope="col"><span>RPI</span></th>
             <th class="col-wp" data-sort="wp" scope="col"><span>Win %</span></th>
             <th class="col-owp" data-sort="owp" scope="col"><span>Opp Win %</span></th>
@@ -101,6 +105,9 @@
     <aside class="legend-footnote">
       <p>
         <span class="sc">Bethel</span> is the iterative maximum-likelihood strength estimate described in Bethel (2005). A team's strength is the value that, together with every opponent's strength, best explains the observed wins and losses. Geometric mean = 1. Higher is better.
+      </p>
+      <p>
+        <span class="sc">Normalize</span> applies a log-compression (anchored so the top team = 20) to put values on a bounded scale closer to commercial implementations. Ranks don't change.
       </p>
       <p>
         <span class="sc">RPI</span> is the classical 0.25·WP + 0.50·OWP + 0.25·OOWP composite, with opponents' win percentages computed exclusive of head-to-head games.

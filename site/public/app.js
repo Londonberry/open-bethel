@@ -56,7 +56,7 @@ const state = {
   teamBySlug: new Map(),
   pairMap: new Map(), // "a|b" (sorted) → hops
   sort: { col: "bethel", dir: "desc" },
-  filters: { search: "", only2a: false, minGames: 0 },
+  filters: { search: "", only2a: false, minGames: 0, normalize: true },
   compare: { a: null, b: null, focusInput: null },
   maxBethel: 0,
 };
@@ -91,6 +91,14 @@ function displayName(slug) {
       return w[0].toUpperCase() + w.slice(1);
     })
     .join(" ");
+}
+
+/** Returns the strength value to display for a team row, respecting the
+ *  normalize toggle. Raw Bethel is preserved for win-probability math; this
+ *  helper is for display only. */
+function displayStrength(rankRow) {
+  if (!rankRow) return null;
+  return state.filters.normalize ? rankRow.bethel_norm : rankRow.bethel;
 }
 
 function fmtNum(n, decimals = 2) {
@@ -177,6 +185,7 @@ async function boot() {
       state.pairMap.set(key, p.hops);
     }
     state.maxBethel = Math.max(...state.data.rankings.map((r) => r.bethel));
+    state.maxBethelNorm = Math.max(...state.data.rankings.map((r) => r.bethel_norm ?? 0));
     renderMasthead();
     window.addEventListener("hashchange", route);
     route();
@@ -241,13 +250,17 @@ function renderIndex() {
   const tbody = document.getElementById("rankings-tbody");
   const search = document.getElementById("f-search");
   const only2a = document.getElementById("f-2a");
+  const normToggle = document.getElementById("f-norm");
   const minGames = document.getElementById("f-min");
   const minGamesVal = document.getElementById("f-min-val");
+  const bethelLabel = document.getElementById("th-bethel-label");
   const countEl = document.getElementById("rankings-count");
   const table = document.getElementById("rankings-table");
 
   search.value = state.filters.search;
   only2a.checked = state.filters.only2a;
+  normToggle.checked = state.filters.normalize;
+  bethelLabel.textContent = state.filters.normalize ? "Bethel·norm" : "Bethel";
   minGames.value = String(state.filters.minGames);
   minGamesVal.textContent = String(state.filters.minGames);
 
@@ -311,11 +324,14 @@ function renderIndex() {
     // Record
     const recCell = el("td", { class: "col-record", text: `${r.wins}–${r.losses}` });
 
-    // Bethel with bar viz
+    // Bethel with bar viz — value/scale switch with the normalize toggle
     const bethelCell = el("td", { class: "col-bethel" });
-    bethelCell.append(document.createTextNode(fmtNum(r.bethel, 2)));
+    const useNorm = state.filters.normalize;
+    const value = useNorm ? r.bethel_norm : r.bethel;
+    const max = useNorm ? state.maxBethelNorm : state.maxBethel;
+    bethelCell.append(document.createTextNode(fmtNum(value, 2)));
     const bar = el("span", { class: "strength-bar" });
-    const pct = Math.max(2, Math.min(100, (r.bethel / state.maxBethel) * 100));
+    const pct = Math.max(2, Math.min(100, (value / max) * 100));
     bar.style.width = `${pct}%`;
     bethelCell.append(bar);
 
@@ -352,6 +368,11 @@ function renderIndex() {
   });
   only2a.addEventListener("change", (e) => {
     state.filters.only2a = e.target.checked;
+    paint();
+  });
+  normToggle.addEventListener("change", (e) => {
+    state.filters.normalize = e.target.checked;
+    bethelLabel.textContent = state.filters.normalize ? "Bethel·norm" : "Bethel";
     paint();
   });
   minGames.addEventListener("input", (e) => {
@@ -408,7 +429,7 @@ function renderTeam(slug) {
   document.getElementById("t-breadcrumb").innerHTML = `<a href="#/">Rankings</a><span aria-hidden="true"> / </span>${escapeHtml(displayName(slug))}`;
   document.getElementById("t-record").innerHTML = `${team.wins}–${team.losses}<span class="sub">·${team.games}g</span>`;
   document.getElementById("t-bethel-rank").innerHTML = `#${team.rank}<span class="sub">of ${fmtInt(state.data.rankings.length)}</span>`;
-  document.getElementById("t-bethel-val").textContent = fmtNum(team.bethel, 2);
+  document.getElementById("t-bethel-val").textContent = fmtNum(displayStrength(team), 2);
   document.getElementById("t-rpi-rank").innerHTML = `#${rpiRank}<span class="sub">of ${fmtInt(state.data.rankings.length)}</span>`;
   document.getElementById("t-wp").textContent = team.wp.toFixed(3);
   document.getElementById("t-owp").textContent = team.owp.toFixed(3);
@@ -492,7 +513,7 @@ function renderExtremeItem(c, slug, kind) {
   left.append(document.createTextNode(displayName(opp)));
   if (oppTeam) {
     const small = el("small", {
-      text: `#${oppTeam.rank} · Bethel ${fmtNum(oppTeam.bethel, 2)}`,
+      text: `#${oppTeam.rank} · Bethel ${fmtNum(displayStrength(oppTeam), 2)}`,
     });
     left.append(small);
   }
@@ -536,7 +557,7 @@ function renderScheduleRow(g, gameIndex, slug, games, contribs, contribsByIdx, a
   tr.append(
     el("td", {
       class: "col-sched-opp-str",
-      text: oppTeam ? fmtNum(oppTeam.bethel, 2) : "—",
+      text: oppTeam ? fmtNum(displayStrength(oppTeam), 2) : "—",
     }),
   );
 
@@ -806,7 +827,7 @@ function renderCompareTeamBlock(team, label) {
       }),
     ]),
     el("p", { class: "cteam-meta", text: `#${team.rank} · ${team.wins}–${team.losses} · Win% ${team.wp.toFixed(3)}` }),
-    el("p", { class: "cteam-strength", text: fmtNum(team.bethel, 3) }),
+    el("p", { class: "cteam-strength", text: fmtNum(displayStrength(team), 3) }),
   );
   return block;
 }
