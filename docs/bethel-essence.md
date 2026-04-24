@@ -1,6 +1,6 @@
 # Bethel's Method — Essence for Implementation
 
-Distilled reference for implementing the ranking method described in *A Solution To The Unequal Strength Of Schedule Problem* by Roy Bethel (MITRE Corporation, August 2005). Source paper archived at `docs/BethelRank.pdf`.
+Distilled reference for implementing the ranking method described in *A Solution To The Unequal Strength Of Schedule Problem* by Roy Bethel (MITRE Corporation, August 2005). Source paper archived at [`https://fliphtml5.com/sdyu/suvz/basic`](https://fliphtml5.com/sdyu/suvz/basic).
 
 ## Summary
 
