@@ -32,6 +32,7 @@ from open_bethel.rpi import classical_rpi
 
 ROOT = Path(__file__).resolve().parent.parent
 CSV_PATH = ROOT / "phase0" / "games-fhsaa-fl-2026.csv"
+CLASSES_PATH = ROOT / "phase0" / "team_classes.json"
 OUT_PATH = Path(__file__).resolve().parent / "public" / "data.json"
 
 # FHSAA Class 2A team slugs (source-site naming conventions). Contributions are
@@ -154,6 +155,10 @@ def main() -> None:
         wins[w] += 1
         losses[l] += 1
 
+    team_classes: dict[str, str] = {}
+    if CLASSES_PATH.exists():
+        team_classes = json.loads(CLASSES_PATH.read_text())
+
     rankings = sorted(
         [
             {
@@ -166,6 +171,7 @@ def main() -> None:
                 "wp": round(rpi[t]["wp"], 4),
                 "owp": round(rpi[t]["owp"], 4),
                 "oowp": round(rpi[t]["oowp"], 4),
+                "class": team_classes.get(t),
             }
             for t in teams
         ],

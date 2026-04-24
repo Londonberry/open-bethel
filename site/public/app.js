@@ -4,51 +4,6 @@
    ========================================================================= */
 
 // -----------------------------------------------------------------------------
-// FHSAA Class 2A team slugs (source-site slugs). Source of truth is build.py;
-// keep this list in sync. Used for the Class-2A filter on the index and for
-// tagging 2A teams in the rankings.
-// -----------------------------------------------------------------------------
-// Slugs for the 75 FHSAA Class 2A teams in our graph. Derived from the
-// FHSAA feed via site/fhsaa_crosscheck.py's MANUAL_SLUG_MAP — keep in sync.
-const FHSAA_2A = new Set([
-  "archbishop-carroll-bulldogs", "bell-creek-academy-panthers",
-  "benjamin-buccaneers", "berkeley-prep-buccaneers",
-  "bishop-mclaughlin-catholic-hurricanes", "bishop-snyder-cardinals",
-  "bolles-bulldogs", "bozeman-bucks", "bradenton-christian-panthers",
-  "brooks-debartolo-collegiate-phoenix", "cardinal-mooney-cougars",
-  "cardinal-newman-crusaders", "carrollwood-day-patriots",
-  "chaminade-madonna-college-prep-lions", "circle-christian-centurions",
-  "clearwater-central-catholic-marauders", "cocoa-beach-minutemen",
-  "coral-shores-hurricanes", "cornerstone-charter-academy-ducks",
-  "crooms-academy-panthers", "discovery-spartans",
-  "episcopal-eagles", "evangelical-christian-sentinels",
-  "father-lopez-green-wave", "first-academy-eagles",
-  "first-baptist-academy-lions", "florida-christian-patriots",
-  "florida-state-university-high-school-seminoles", "foundation-academy-lions",
-  "gateway-charter-eagles", "hialeah-educational-academy-bulldogs",
-  "holy-trinity-episcopal-academy-tigers", "interlachen-rams",
-  "john-carroll-catholic-golden-rams", "keys-gate-knights",
-  "keystone-heights-indians", "kings-academy-lions",
-  "lake-highland-prep-highlanders", "lakeland-christian-vikings",
-  "maclay-marauders", "marco-island-academy-manta-rays",
-  "masters-academy-patriots", "mater-bay-academy-rays",
-  "melbourne-central-catholic-hustlers", "montverde-academy-eagles",
-  "northside-christian-mustangs", "nsu-university-sharks",
-  "oasis-sharks", "out-of-door-academy-thunder",
-  "oxbridge-academy-thunderwolves", "palmer-trinity-falcons",
-  "pensacola-catholic-crusaders", "pk-yonge-blue-wave",
-  "providence-school-stallions", "ransom-everglades-raiders",
-  "riviera-prep-bulldogs", "saint-andrews-scots",
-  "santa-fe-catholic-hawks", "sarasota-military-academy-eagles",
-  "shorecrest-preparatory-chargers", "somerset-academy-south-homestead-hurricanes",
-  "st-john-paul-ii-academy-eagles", "st-petersburg-catholic-barons",
-  "tampa-catholic-crusaders", "tampa-prep-terrapins",
-  "trinity-catholic-celtics", "trinity-christian-academy-conquerors",
-  "trinity-prep-saints", "westminster-academy-lions",
-  "westminster-christian-warriors", "windermere-prep-lakers",
-]);
-
-// -----------------------------------------------------------------------------
 // State
 // -----------------------------------------------------------------------------
 const state = {
@@ -56,7 +11,7 @@ const state = {
   teamBySlug: new Map(),
   pairMap: new Map(), // "a|b" (sorted) → hops
   sort: { col: "bethel", dir: "desc" },
-  filters: { search: "", only2a: false, minGames: 0, normalize: true },
+  filters: { search: "", classFilter: "", minGames: 0, normalize: true },
   compare: { a: null, b: null, focusInput: null },
   maxBethel: 0,
 };
@@ -249,7 +204,7 @@ function renderIndex() {
 
   const tbody = document.getElementById("rankings-tbody");
   const search = document.getElementById("f-search");
-  const only2a = document.getElementById("f-2a");
+  const classSelect = document.getElementById("f-class");
   const normToggle = document.getElementById("f-norm");
   const minGames = document.getElementById("f-min");
   const minGamesVal = document.getElementById("f-min-val");
@@ -258,7 +213,7 @@ function renderIndex() {
   const table = document.getElementById("rankings-table");
 
   search.value = state.filters.search;
-  only2a.checked = state.filters.only2a;
+  classSelect.value = state.filters.classFilter;
   normToggle.checked = state.filters.normalize;
   bethelLabel.textContent = state.filters.normalize ? "Bethel·norm" : "Bethel";
   minGames.value = String(state.filters.minGames);
@@ -282,7 +237,7 @@ function renderIndex() {
 
   function filteredSorted() {
     let rows = state.data.rankings.filter((r) => {
-      if (state.filters.only2a && !FHSAA_2A.has(r.team)) return false;
+      if (state.filters.classFilter && r.class !== state.filters.classFilter) return false;
       if (r.games < state.filters.minGames) return false;
       if (state.filters.search) {
         const q = state.filters.search.toLowerCase();
@@ -319,7 +274,7 @@ function renderIndex() {
     const teamCell = el("td", { class: "col-team" });
     const teamDisp = el("span", { class: "team-display", text: displayName(r.team) });
     teamCell.append(teamDisp);
-    if (FHSAA_2A.has(r.team)) teamCell.append(el("span", { class: "team-badge", text: "2A" }));
+    if (r.class) teamCell.append(el("span", { class: `team-badge class-${r.class}`, text: r.class }));
 
     // Record
     const recCell = el("td", { class: "col-record", text: `${r.wins}–${r.losses}` });
@@ -366,8 +321,8 @@ function renderIndex() {
       paint();
     }, 100);
   });
-  only2a.addEventListener("change", (e) => {
-    state.filters.only2a = e.target.checked;
+  classSelect.addEventListener("change", (e) => {
+    state.filters.classFilter = e.target.value;
     paint();
   });
   normToggle.addEventListener("change", (e) => {
