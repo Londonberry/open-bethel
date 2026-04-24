@@ -37,14 +37,11 @@ MANUAL_SLUG_MAP = {
     "P.K. Yonge (Gainesville, FL)": "pk-yonge-blue-wave",
     # Disambiguate same-named teams (e.g. two "Trinity Christian Academy"s in FL).
     "Trinity Christian Academy (Jacksonville, FL)": "trinity-christian-academy-conquerors",
-    # Teams our crawl didn't reach — left as None so the script reports them
-    # as genuinely missing from the dataset, not just unmatched.
-    "Ransom Everglades (Miami, FL)": None,
-    "Riviera Prep (Miami, FL)": None,
-    # The Somerset Academy entry is the Homestead branch, which our BFS
-    # didn't reach; the similarly-named slugs in our graph are different
-    # Somerset branches (Canyons, Silver Palms).
-    "Somerset Academy South Homestead (Homestead, FL)": None,
+    # Disambiguate Somerset branches — FHSAA means the Homestead campus.
+    "Somerset Academy South Homestead (Homestead, FL)": "somerset-academy-south-homestead-hurricanes",
+    "Ransom Everglades (Miami, FL)": "ransom-everglades-raiders",
+    "Riviera Prep (Miami, FL)": "riviera-prep-bulldogs",
+    "John Carroll Catholic (Fort Pierce, FL)": "john-carroll-catholic-golden-rams",
 }
 
 

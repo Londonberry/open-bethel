@@ -8,6 +8,8 @@
 // keep this list in sync. Used for the Class-2A filter on the index and for
 // tagging 2A teams in the rankings.
 // -----------------------------------------------------------------------------
+// Slugs for the 75 FHSAA Class 2A teams in our graph. Derived from the
+// FHSAA feed via site/fhsaa_crosscheck.py's MANUAL_SLUG_MAP — keep in sync.
 const FHSAA_2A = new Set([
   "archbishop-carroll-bulldogs", "bell-creek-academy-panthers",
   "benjamin-buccaneers", "berkeley-prep-buccaneers",
@@ -25,20 +27,20 @@ const FHSAA_2A = new Set([
   "florida-state-university-high-school-seminoles", "foundation-academy-lions",
   "gateway-charter-eagles", "hialeah-educational-academy-bulldogs",
   "holy-trinity-episcopal-academy-tigers", "interlachen-rams",
-  "john-carroll-catholic", "keys-gate-charter-knights",
+  "john-carroll-catholic-golden-rams", "keys-gate-knights",
   "keystone-heights-indians", "kings-academy-lions",
   "lake-highland-prep-highlanders", "lakeland-christian-vikings",
   "maclay-marauders", "marco-island-academy-manta-rays",
-  "masters-academy-patriots", "mater-academy-lions",
+  "masters-academy-patriots", "mater-bay-academy-rays",
   "melbourne-central-catholic-hustlers", "montverde-academy-eagles",
-  "northside-christian-mustangs", "nsu-university-school-sharks",
+  "northside-christian-mustangs", "nsu-university-sharks",
   "oasis-sharks", "out-of-door-academy-thunder",
   "oxbridge-academy-thunderwolves", "palmer-trinity-falcons",
   "pensacola-catholic-crusaders", "pk-yonge-blue-wave",
   "providence-school-stallions", "ransom-everglades-raiders",
-  "riviera-preparatory-school-bulldogs", "santa-fe-catholic-hawks",
-  "sarasota-military-academy-eagles", "shorecrest-preparatory-chargers",
-  "somerset-academy-canyons-cougars", "st-andrews-scots",
+  "riviera-prep-bulldogs", "saint-andrews-scots",
+  "santa-fe-catholic-hawks", "sarasota-military-academy-eagles",
+  "shorecrest-preparatory-chargers", "somerset-academy-south-homestead-hurricanes",
   "st-john-paul-ii-academy-eagles", "st-petersburg-catholic-barons",
   "tampa-catholic-crusaders", "tampa-prep-terrapins",
   "trinity-catholic-celtics", "trinity-christian-academy-conquerors",
