@@ -98,7 +98,6 @@ date,home_team,away_team,home_score,away_score,game_type
 2026-02-10,dr-phillips-panthers,west-orange-warriors,1,3,regular
 2026-02-10,dunnellon-tigers,trenton-tigers,1,6,regular
 2026-02-10,episcopal-eagles,trinity-catholic-celtics,4,7,regular
-2026-02-10,episcopal-school-of-jacksonville-eagles,trinity-catholic-celtics,4,7,regular
 2026-02-10,estero-wildcats,naples-golden-eagles,4,2,regular
 2026-02-10,eustis-panthers,tavares-bulldogs,18,2,regular
 2026-02-10,father-lopez-green-wave,pine-ridge-panthers,2,10,regular
@@ -254,7 +253,6 @@ date,home_team,away_team,home_score,away_score,game_type
 2026-02-11,strawberry-crest-chargers,plant-panthers,4,2,regular
 2026-02-11,suncoast-chargers,seminole-ridge-hawks,5,6,regular
 2026-02-11,suwannee-bulldogs,episcopal-eagles,7,6,regular
-2026-02-11,suwannee-bulldogs,episcopal-school-of-jacksonville-eagles,7,6,regular
 2026-02-11,taravella-trojan-man,spanish-river-sharks,4,3,regular
 2026-02-11,the-village-school-of-naples-knights,marco-island-academy-manta-rays,10,3,regular
 2026-02-11,trinity-prep-saints,legacy-charter-eagles,20,0,regular
@@ -413,7 +411,6 @@ date,home_team,away_team,home_score,away_score,game_type
 2026-02-13,fernandina-beach-fighting-pirates,baldwin-indians,5,4,regular
 2026-02-13,first-baptist-academy-lions,lely-trojans,15,0,regular
 2026-02-13,flagler-palm-coast-bulldogs,episcopal-eagles,6,5,regular
-2026-02-13,flagler-palm-coast-bulldogs,episcopal-school-of-jacksonville-eagles,6,5,regular
 2026-02-13,fleming-island-golden-eagles,middleburg-broncos,10,0,regular
 2026-02-13,fletcher-senators,wolfson-wolfpack,5,0,regular
 2026-02-13,florida-christian-patriots,braddock-bulldogs,12,5,regular
@@ -586,7 +583,6 @@ date,home_team,away_team,home_score,away_score,game_type
 2026-02-17,eastside-rams,pk-yonge-blue-wave,0,17,regular
 2026-02-17,ed-white-commanders,ribault-trojans,11,1,regular
 2026-02-17,episcopal-eagles,west-nassau-warriors,10,0,regular
-2026-02-17,episcopal-school-of-jacksonville-eagles,west-nassau-warriors,10,0,regular
 2026-02-17,eustis-panthers,windermere-wolverines,2,5,regular
 2026-02-17,father-lopez-green-wave,lake-highland-prep-highlanders,4,9,regular
 2026-02-17,fernandina-beach-fighting-pirates,sandalwood-mighty-saints,2,0,regular
@@ -801,7 +797,6 @@ date,home_team,away_team,home_score,away_score,game_type
 2026-02-19,clay-blue-devils,creekside-knights,1,5,regular
 2026-02-19,coffee,foundation-academy-lions,12,4,regular
 2026-02-19,columbia-tigers,episcopal-eagles,13,3,regular
-2026-02-19,columbia-tigers,episcopal-school-of-jacksonville-eagles,13,3,regular
 2026-02-19,columbus-explorers,coral-gables-cavaliers,9,2,regular
 2026-02-19,coral-glades-jaguars,mater-lakes-academy-bears,6,2,regular
 2026-02-19,coral-reef-barracudas,coral-park-rams,18,2,regular
@@ -947,7 +942,6 @@ date,home_team,away_team,home_score,away_score,game_type
 2026-02-20,eastside-rams,saint-francis-catholic-academy-wolves,2,12,regular
 2026-02-20,eau-gallie-commodores,new-smyrna-beach-barracudas,11,1,regular
 2026-02-20,episcopal-eagles,fletcher-senators,1,4,regular
-2026-02-20,episcopal-school-of-jacksonville-eagles,fletcher-senators,1,4,regular
 2026-02-20,evangelical-christian-sentinels,sarasota-christian-blazers,16,3,regular
 2026-02-20,fernandina-beach-fighting-pirates,bishop-kenny-crusaders,9,1,regular
 2026-02-20,flanagan-falcons,coral-glades-jaguars,1,6,regular
@@ -1169,7 +1163,6 @@ date,home_team,away_team,home_score,away_score,game_type
 2026-02-24,duval-charter-panthers,bradford-tornadoes,6,5,regular
 2026-02-24,dwyer-panthers,suncoast-chargers,2,3,regular
 2026-02-24,episcopal-eagles,yulee-hornets,11,1,regular
-2026-02-24,episcopal-school-of-jacksonville-eagles,yulee-hornets,11,1,regular
 2026-02-24,evangelical-christian-sentinels,community-school-of-naples-seahawks,1,10,regular
 2026-02-24,florida-state-university-high-school-seminoles,colquitt-county,3,5,regular
 2026-02-24,forest-wildcats,lake-weir-hurricanes,10,0,regular
@@ -1527,7 +1520,6 @@ date,home_team,away_team,home_score,away_score,game_type
 2026-02-27,st-brendan-sabres,spanish-river-sharks,1,0,regular
 2026-02-27,st-cloud-bulldogs,osceola-kowboys,6,1,regular
 2026-02-27,st-john-paul-ii-academy-eagles,episcopal-eagles,9,0,regular
-2026-02-27,st-john-paul-ii-academy-eagles,episcopal-school-of-jacksonville-eagles,9,0,regular
 2026-02-27,st-johns-country-day-spartans,lincoln-trojans,11,1,regular
 2026-02-27,tate-aggies,escambia-gators,10,0,regular
 2026-02-27,tavares-bulldogs,mount-dora-canes,1,9,regular
@@ -1562,7 +1554,6 @@ date,home_team,away_team,home_score,away_score,game_type
 2026-02-28,braddock-bulldogs,riverview-sarasota-rams,11,5,regular
 2026-02-28,camden-county,manatee-hurricanes,4,5,regular
 2026-02-28,cardinal-gibbons-chiefs,episcopal-eagles,1,5,regular
-2026-02-28,cardinal-gibbons-chiefs,episcopal-school-of-jacksonville-eagles,1,5,regular
 2026-02-28,charlotte-fighting-tarpons,brookwood,5,3,regular
 2026-02-28,charlotte-fighting-tarpons,chelsea,1,7,regular
 2026-02-28,chipley-tigers,st-john-paul-ii-panthers,3,8,regular
@@ -1827,7 +1818,6 @@ date,home_team,away_team,home_score,away_score,game_type
 2026-03-04,dr-joaquin-garcia-bulldogs,suncoast-chargers,2,7,regular
 2026-03-04,dr-phillips-panthers,windermere-wolverines,3,5,regular
 2026-03-04,episcopal-eagles,santa-fe-raiders,10,4,regular
-2026-03-04,episcopal-school-of-jacksonville-eagles,santa-fe-raiders,10,4,regular
 2026-03-04,escambia-gators,milton-panthers,4,3,regular
 2026-03-04,ferguson-falcons,abf-academy-cowboys,3,9,regular
 2026-03-04,fernandina-beach-fighting-pirates,bolles-bulldogs,0,1,regular
@@ -1905,7 +1895,6 @@ date,home_team,away_team,home_score,away_score,game_type
 2026-03-05,eagles-view-warriors,hilliard-flashes,5,11,regular
 2026-03-05,east-ridge-knights,cornerstone-charter-academy-ducks,9,7,regular
 2026-03-05,episcopal-eagles,beachside-barracudas,8,1,regular
-2026-03-05,episcopal-school-of-jacksonville-eagles,beachside-barracudas,8,1,regular
 2026-03-05,everglades-gators,somerset-academy-panthers,1,22,regular
 2026-03-05,faith-academy,pensacola-catholic-crusaders,13,3,regular
 2026-03-05,famu-drs-rattlers,gadsden-county-jaguars,17,4,regular
@@ -2440,7 +2429,6 @@ date,home_team,away_team,home_score,away_score,game_type
 2026-03-11,st-cloud-bulldogs,olympia-titans,7,2,regular
 2026-03-11,st-john-paul-ii-academy-eagles,coral-springs-colts,3,2,regular
 2026-03-11,stanton-blue-devils,episcopal-eagles,0,12,regular
-2026-03-11,stanton-blue-devils,episcopal-school-of-jacksonville-eagles,0,12,regular
 2026-03-11,stoneman-douglas-eagles,msa,3,0,regular
 2026-03-11,suwannee-bulldogs,chiles-timberwolves,0,8,regular
 2026-03-11,tampa-prep-terrapins,berkeley-prep-buccaneers,5,7,regular
@@ -2595,7 +2583,6 @@ date,home_team,away_team,home_score,away_score,game_type
 2026-03-13,chiefland-indians,marathon-dolphins,10,0,regular
 2026-03-13,chiles-timberwolves,north-marion-colts,5,0,regular
 2026-03-13,christs-church-academy-eagles,episcopal-eagles,5,14,regular
-2026-03-13,christs-church-academy-eagles,episcopal-school-of-jacksonville-eagles,5,14,regular
 2026-03-13,clay-blue-devils,fleming-island-golden-eagles,8,0,regular
 2026-03-13,community-school-of-naples-seahawks,img-academy-silver-ascenders,3,0,regular
 2026-03-13,countryside-christian-minutemen,oak-hall-eagles,3,12,regular
@@ -2809,7 +2796,6 @@ date,home_team,away_team,home_score,away_score,game_type
 2026-03-17,duval-charter-panthers,middleburg-broncos,0,11,regular
 2026-03-17,east-ridge-knights,flanagan-falcons,0,6,regular
 2026-03-17,episcopal-eagles,bartram-trail-bears,2,6,regular
-2026-03-17,episcopal-school-of-jacksonville-eagles,bartram-trail-bears,2,6,regular
 2026-03-17,erwin,west-port-wolf-pack,8,2,regular
 2026-03-17,evangelical-christian-sentinels,the-masters-academy-eagles,12,2,regular
 2026-03-17,flagler-palm-coast-bulldogs,img-academy-silver-ascenders,7,0,regular
@@ -2917,7 +2903,6 @@ date,home_team,away_team,home_score,away_score,game_type
 2026-03-18,cypress-bay-captain-lightning,east-ridge-knights,9,5,regular
 2026-03-18,destin-sharks,hope-christian-academy,12,0,regular
 2026-03-18,episcopal-eagles,saint-francis-catholic-academy-wolves,8,0,regular
-2026-03-18,episcopal-school-of-jacksonville-eagles,saint-francis-catholic-academy-wolves,8,0,regular
 2026-03-18,eustis-panthers,deltona-wolves,12,7,regular
 2026-03-18,evangelical-christian-sentinels,bayshore-bruins,9,3,regular
 2026-03-18,ferguson-falcons,piper-bengals,12,11,regular
@@ -3097,7 +3082,6 @@ date,home_team,away_team,home_score,away_score,game_type
 2026-03-20,bishop-kenny-crusaders,calvary-day,5,2,regular
 2026-03-20,bishop-moore-hornets,hagerty-huskies,1,4,regular
 2026-03-20,bolles-bulldogs,episcopal-eagles,2,3,regular
-2026-03-20,bolles-bulldogs,episcopal-school-of-jacksonville-eagles,2,3,regular
 2026-03-20,bradford-tornadoes,middleburg-broncos,2,9,regular
 2026-03-20,branford-buccaneers,trenton-tigers,4,3,regular
 2026-03-20,carrollwood-day-patriots,calvary-christian-warriors,0,14,regular
@@ -3426,7 +3410,6 @@ date,home_team,away_team,home_score,away_score,game_type
 2026-03-25,jesuit-tigers,trinity,0,2,regular
 2026-03-25,lake-minneola-hawks,florida-christian-patriots,6,11,regular
 2026-03-25,menendez-falcons,episcopal-eagles,2,13,regular
-2026-03-25,menendez-falcons,episcopal-school-of-jacksonville-eagles,2,13,regular
 2026-03-25,miami-beach-hi-tides,gulliver-prep-raiders,0,7,regular
 2026-03-25,mosley-dolphins,jonesboro,5,10,regular
 2026-03-25,mount-dora-canes,pine-ridge-panthers,9,5,regular
@@ -3545,7 +3528,6 @@ date,home_team,away_team,home_score,away_score,game_type
 2026-03-26,palmetto-ridge-bears,golden-gate-titans,10,0,regular
 2026-03-26,palmetto-tigers,sarasota-sailors,8,7,regular
 2026-03-26,providence-school-stallions,episcopal-eagles,3,5,regular
-2026-03-26,providence-school-stallions,episcopal-school-of-jacksonville-eagles,3,5,regular
 2026-03-26,rickards-raiders,bainbridge,5,8,regular
 2026-03-26,riverview-sarasota-rams,cardinal-mooney-cougars,0,5,regular
 2026-03-26,rocky-bayou-christian-knights,gulf-pointe-latin-gladiators,17,2,regular
@@ -3678,7 +3660,6 @@ date,home_team,away_team,home_score,away_score,game_type
 2026-03-27,rutherford-rams,bay-tornadoes,4,3,regular
 2026-03-27,saint-andrews-scots,st-john-paul-ii-academy-eagles,2,9,regular
 2026-03-27,sandalwood-mighty-saints,episcopal-eagles,4,3,regular
-2026-03-27,sandalwood-mighty-saints,episcopal-school-of-jacksonville-eagles,4,3,regular
 2026-03-27,santa-fe-raiders,buchholz-bobcats,1,2,regular
 2026-03-27,santaluces-chiefs,lake-worth-trojans,16,0,regular
 2026-03-27,sarasota-christian-blazers,lakewood-ranch-preparatory-academy-eagles,11,1,regular
@@ -3765,7 +3746,6 @@ date,home_team,away_team,home_score,away_score,game_type
 2026-03-30,east-ridge-knights,davenport-broncos,7,9,regular
 2026-03-30,edgewater-eagles,foundation-academy-lions,6,5,regular
 2026-03-30,episcopal-eagles,fort-dorchester,2,0,regular
-2026-03-30,episcopal-school-of-jacksonville-eagles,fort-dorchester,2,0,regular
 2026-03-30,eustis-panthers,south-lake-eagles,5,1,regular
 2026-03-30,evangelical-christian-sentinels,south-fort-myers-wolfpack,7,6,regular
 2026-03-30,faith-lutheran,miami-christian-victors,8,0,regular
@@ -3979,7 +3959,6 @@ date,home_team,away_team,home_score,away_score,game_type
 2026-03-31,trinity-prep-saints,orlando-christian-prep-warriors,10,4,regular
 2026-03-31,union-county-fighting-tigers,williston-mighty-red-devils,10,8,regular
 2026-03-31,university-christian-fighting-christians,episcopal-eagles,3,14,regular
-2026-03-31,university-christian-fighting-christians,episcopal-school-of-jacksonville-eagles,3,14,regular
 2026-03-31,university-christian-fighting-christians,fort-dorchester,7,6,regular
 2026-03-31,vanguard-knights,west-port-wolf-pack,8,2,regular
 2026-03-31,venice-indians,barron-collier-cougars,6,2,regular
@@ -4014,7 +3993,6 @@ date,home_team,away_team,home_score,away_score,game_type
 2026-04-01,dunnellon-tigers,west-port-wolf-pack,12,9,regular
 2026-04-01,ed-white-commanders,orange-park-raiders,7,6,regular
 2026-04-01,episcopal-eagles,st-augustine-yellow-jackets,6,1,regular
-2026-04-01,episcopal-school-of-jacksonville-eagles,st-augustine-yellow-jackets,6,1,regular
 2026-04-01,escondido,gulliver-prep-raiders,1,5,regular
 2026-04-01,eustis-panthers,horizon-hawks,1,6,regular
 2026-04-01,florida-state-university-high-school-seminoles,wakulla-war-eagles,8,6,regular
@@ -4290,7 +4268,6 @@ date,home_team,away_team,home_score,away_score,game_type
 2026-04-06,dme-academy,foundation-academy-lions,2,4,regular
 2026-04-06,duval-charter-panthers,andrew-jackson-tigers,11,1,regular
 2026-04-06,episcopal-eagles,eagles-view-warriors,25,5,regular
-2026-04-06,episcopal-school-of-jacksonville-eagles,eagles-view-warriors,25,5,regular
 2026-04-06,first-coast-christian-knights,cedar-creek-christian-saints,1,0,regular
 2026-04-06,flagler-palm-coast-bulldogs,st-augustine-yellow-jackets,5,7,regular
 2026-04-06,flanagan-falcons,american-heritage-patriots,1,9,regular
@@ -4381,7 +4358,6 @@ date,home_team,away_team,home_score,away_score,game_type
 2026-04-07,east-lee-county-jaguars,immokalee-indians,0,0,regular
 2026-04-07,edgewater-eagles,university-cougars,16,6,regular
 2026-04-07,episcopal-eagles,clay-blue-devils,0,5,regular
-2026-04-07,episcopal-school-of-jacksonville-eagles,clay-blue-devils,0,5,regular
 2026-04-07,escambia-gators,tate-aggies,0,5,regular
 2026-04-07,evangelical-christian-sentinels,aubrey-rogers-patriots,2,1,regular
 2026-04-07,first-baptist-academy-lions,golden-gate-titans,5,2,regular
@@ -4680,7 +4656,6 @@ date,home_team,away_team,home_score,away_score,game_type
 2026-04-10,mount-dora-canes,forest-wildcats,3,0,regular
 2026-04-10,mount-dora-christian-academy-bulldogs,trenton-tigers,11,5,regular
 2026-04-10,nease-golden-panthers,episcopal-eagles,2,11,regular
-2026-04-10,nease-golden-panthers,episcopal-school-of-jacksonville-eagles,2,11,regular
 2026-04-10,newberry-panthers,gainesville-purple-hurricanes,12,0,regular
 2026-04-10,north-florida-christian-eagles,rocky-bayou-christian-knights,10,0,regular
 2026-04-10,oakleaf-knights,orange-park-raiders,14,4,regular
@@ -4852,7 +4827,6 @@ date,home_team,away_team,home_score,away_score,game_type
 2026-04-14,plant-panthers,steinbrenner-warriors,6,5,regular
 2026-04-14,ponte-vedra-sharks,orange-park-raiders,2,1,regular
 2026-04-14,providence-school-stallions,episcopal-eagles,5,9,regular
-2026-04-14,providence-school-stallions,episcopal-school-of-jacksonville-eagles,5,9,regular
 2026-04-14,rickards-raiders,wakulla-war-eagles,0,17,regular
 2026-04-14,riverdale-raiders,charlotte-fighting-tarpons,0,8,regular
 2026-04-14,riverside-generals,westside-wolverines,9,10,regular
@@ -4992,7 +4966,6 @@ date,home_team,away_team,home_score,away_score,game_type
 2026-04-16,dunnellon-tigers,vanguard-knights,3,8,regular
 2026-04-16,east-river-falcons,lake-howell-silverhawks,1,4,regular
 2026-04-16,episcopal-eagles,trinity-christian-academy-conquerors,0,9,regular
-2026-04-16,episcopal-school-of-jacksonville-eagles,trinity-christian-academy-conquerors,0,9,regular
 2026-04-16,fernandina-beach-fighting-pirates,west-nassau-warriors,10,0,regular
 2026-04-16,first-baptist-academy-lions,community-school-of-naples-seahawks,3,0,regular
 2026-04-16,fletcher-senators,mandarin-mustangs,2,3,regular
