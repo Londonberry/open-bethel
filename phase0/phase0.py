@@ -27,12 +27,21 @@ from collections import defaultdict, deque
 from pathlib import Path
 
 DEFAULT_CSV = Path(__file__).parent / "games-district-3-2a-2026.csv"
+# Union of known canonical slugs for the District 3-2A focus teams, across
+# both the hand-compiled CSV (short slugs) and the crawled CSV (source-site
+# slugs with mascot suffixes). Only teams actually present in the loaded
+# dataset are displayed.
 FOCUS_TEAMS = (
     "bishop-snyder",
     "bolles",
     "episcopal",
     "providence",
     "trinity-christian",
+    "bishop-snyder-cardinals",
+    "bolles-bulldogs",
+    "episcopal-eagles",
+    "providence-school-stallions",
+    "trinity-christian-academy-conquerors",
 )
 
 
@@ -214,7 +223,10 @@ def main(csv_path: Path) -> None:
     rpi = classical_rpi(teams, games)
 
     focus_rows = []
+    team_set = set(teams)
     for t in FOCUS_TEAMS:
+        if t not in team_set:
+            continue
         w = sum(1 for (a, _) in games if a == t)
         l = sum(1 for (_, b) in games if b == t)
         focus_rows.append((t, w, l, strengths.get(t, float("nan")), rpi[t]["rpi"], rpi[t]["wp"]))
@@ -240,11 +252,12 @@ def main(csv_path: Path) -> None:
     print("=" * 70)
     print("Pairwise connectivity  (0 = played direct, 1 = common opp, ...)")
     print("=" * 70)
-    for i, a in enumerate(FOCUS_TEAMS):
-        for b in FOCUS_TEAMS[i + 1:]:
+    present = [t for t in FOCUS_TEAMS if t in team_set]
+    for i, a in enumerate(present):
+        for b in present[i + 1:]:
             d = indirection(teams, games, a, b)
             mark = "DIRECT" if d == 0 else (f"indirect (+{d})" if d is not None else "DISCONNECTED")
-            print(f"  {a:<22} vs {b:<22} {mark}")
+            print(f"  {a:<35} vs {b:<35} {mark}")
 
 
 if __name__ == "__main__":

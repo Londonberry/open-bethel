@@ -5,8 +5,13 @@ A single-file reference implementation of the two ranking methods at the core of
 ## Run it
 
 ```
-python3 phase0/phase0.py              # rankings on the included sample
-python3 phase0/validate.py            # predictive-accuracy harness
+# District-only sample (122 games, 69 teams):
+python3 phase0/phase0.py
+python3 phase0/validate.py
+
+# Full FL graph (4,395 games, 821 teams):
+python3 phase0/phase0.py  phase0/games-fhsaa-fl-2026.csv
+python3 phase0/validate.py phase0/games-fhsaa-fl-2026.csv
 ```
 
 No dependencies beyond the Python standard library. Tested on Python 3.10+.
@@ -19,7 +24,10 @@ No dependencies beyond the Python standard library. Tested on Python 3.10+.
 
 ## Data
 
-The sample dataset (`games-district-3-2a-2026.csv`) covers the full 2026 season of five FHSAA Class 2A Region 1 District 3 baseball teams — including every non-district game they played — so that opponent-of-opponent chains reach outside the district for strength-of-schedule calculation. 122 deduped games across 69 distinct teams.
+Two datasets ship in this directory:
+
+- **`games-district-3-2a-2026.csv`** — 122 deduped games across 69 teams. Full 2026 season of five FHSAA Class 2A Region 1 District 3 teams plus every non-district opponent they played. Compiled from public schedule pages, with provenance in `scripts/build_district_3_2a_csv.py`.
+- **`games-fhsaa-fl-2026.csv`** — 4,395 deduped games across 821 teams. Breadth-first expansion from the five District 3-2A seeds to two opponent-hops out, capturing most FHSAA Class 2A teams and a long tail of their opponents. Produced by a private crawler (not checked in) that emits this generic schema; the CSV is the only artifact that crosses into this repo.
 
 Team pages were compiled from public sources on 2026-04-24:
 - [Jacksonville High School Baseball Network — 2A District 3](https://jacksonvillehighschoolbaseball.com/division/2a-district-3/)
@@ -54,7 +62,18 @@ Pairwise connectivity
 
 `validate.py` splits the CSV at a date cutoff, trains each ranking method on games before the cutoff, and scores each method's predicted win probability against the actual outcomes of games from the cutoff onward. Metrics: accuracy, log-loss, and Brier score, against three baselines (Bethel, classical RPI, Laplace-smoothed win-percentage Bradley-Terry, and a 50/50 coin). Usage: `python3 phase0/validate.py [csv] [YYYY-MM-DD cutoff]`.
 
-The harness scaffolding is complete; the held-out set on the current sample (22–54 games depending on cutoff) is too small to draw firm conclusions. What it does demonstrate is where the current data scale breaks calibration: rating-as-probability conversions blow up when a team has very few training games, which is exactly the sparse-graph regime a district-scoped dataset lives in. Expanding to a full state-or-class dataset is what makes this benchmark meaningful.
+Results on the statewide graph (n = 938 held-out games, cutoff 2026-04-01):
+
+| method | accuracy | log-loss | Brier |
+|---|---|---|---|
+| Bethel | **0.757** | **0.494** | **0.163** |
+| Classical RPI | 0.744 | 1.030 | 0.222 |
+| Laplace-smoothed W% | 0.683 | 0.600 | 0.206 |
+| 50/50 coin | 0.663 | 0.693 | 0.250 |
+
+The pattern holds across cutoffs at 3/15, 3/20, 4/01, and 4/10: Bethel beats the naive win-percentage baseline on accuracy by 5–9 points, and has the best log-loss of any method at every cutoff. On the district-only dataset (122 games), Bethel could not distinguish itself from the naive baseline. The result moving from 122 games to 4,395 games is a direct confirmation that the method needs graph density, not more clever math, to produce defensible predictions.
+
+(Classical RPI's log-loss is poor because "rating divided by sum of ratings" is not a calibrated probability — a production RPI implementation would fit a logistic calibrator on top. Accuracy numbers are not affected.)
 
 ## What this phase does NOT do
 
