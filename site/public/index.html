@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>open-bethel — FHSAA baseball rankings, explained</title>
+  <meta name="description" content="An open, auditable ranking engine for FHSAA high school baseball. Every ranking explainable down to the individual game.">
+  <meta name="color-scheme" content="light">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=JetBrains+Mono:wght@300..700&display=swap">
+</head>
+<body>
+  <div class="paper-texture" aria-hidden="true"></div>
+
+  <header class="masthead">
+    <div class="masthead-inner">
+      <div class="masthead-rail" aria-hidden="true">
+        <span class="rail-ornament">✦</span>
+      </div>
+      <a href="#/" class="wordmark" aria-label="open-bethel, home">
+        <span class="wordmark-open">open</span><span class="wordmark-dot">·</span><span class="wordmark-bethel">bethel</span>
+      </a>
+      <p class="masthead-tagline"><em>An open, auditable ranking engine for FHSAA high school baseball.</em></p>
+      <p class="masthead-meta" id="masthead-meta" aria-live="polite"></p>
+    </div>
+
+    <nav class="primary-nav" aria-label="Primary">
+      <div class="primary-nav-inner">
+        <a href="#/" data-route-match="^/?$">Rankings</a>
+        <a href="#/compare" data-route-match="^/compare">Compare</a>
+        <a href="#/method" data-route-match="^/method">Method</a>
+        <a href="#/about" data-route-match="^/about">About</a>
+        <a class="primary-nav-external" href="https://github.com/Londonberry/open-bethel" rel="noopener">Source ↗</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="app" class="app-main" tabindex="-1">
+    <div class="app-loading" role="status" aria-live="polite">
+      <span class="app-loading-mark" aria-hidden="true"></span>
+      <span>Loading rankings…</span>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <p class="colophon">
+        Built with open data · MIT license · <a href="https://github.com/Londonberry/open-bethel" rel="noopener">github.com/Londonberry/open-bethel</a>
+      </p>
+      <p class="credit">
+        Named for Roy Bethel, whose <span class="sc">2005</span> paper on the Bradley-Terry-Ford model is the mathematical foundation implemented here.
+      </p>
+    </div>
+  </footer>
+
+  <template id="tpl-index">
+    <section class="page-intro">
+      <div class="page-intro-inner">
+        <p class="kicker">Rankings · 2026 season</p>
+        <h1 class="headline">Who is beating whom, and what does that mean?</h1>
+        <p class="deck">
+          Every Florida high school baseball team in the graph — ranked by an iterative maximum-likelihood estimate of relative strength, with classical RPI alongside for comparison. Click any team to see how each of their games moved their number.
+        </p>
+      </div>
+    </section>
+
+    <section class="rankings-controls" aria-label="Filter rankings">
+      <div class="control-group control-search">
+        <label for="f-search" class="field-label">Find a team</label>
+        <input
+          id="f-search"
+          type="search"
+          placeholder="type part of a name…"
+          autocomplete="off"
+          spellcheck="false"
+        />
+      </div>
+      <div class="control-group control-toggle">
+        <input id="f-2a" type="checkbox">
+        <label for="f-2a">FHSAA Class 2A only</label>
+      </div>
+      <div class="control-group control-range">
+        <label for="f-min">Min. games <span class="val" id="f-min-val">0</span></label>
+        <input id="f-min" type="range" min="0" max="30" step="1" value="0">
+      </div>
+      <div class="control-summary" id="rankings-count"></div>
+    </section>
+
+    <section class="rankings-table-wrap">
+      <table class="rankings-table" id="rankings-table">
+        <thead>
+          <tr>
+            <th class="col-rank" data-sort="rank" scope="col"><span>#</span></th>
+            <th class="col-team" data-sort="team" scope="col"><span>Team</span></th>
+            <th class="col-record" data-sort="wp" scope="col"><span>Record</span></th>
+            <th class="col-bethel is-active" data-sort="bethel" scope="col"><span>Bethel</span></th>
+            <th class="col-rpi" data-sort="rpi" scope="col"><span>RPI</span></th>
+            <th class="col-wp" data-sort="wp" scope="col"><span>Win %</span></th>
+            <th class="col-owp" data-sort="owp" scope="col"><span>Opp Win %</span></th>
+          </tr>
+        </thead>
+        <tbody id="rankings-tbody"></tbody>
+      </table>
+    </section>
+
+    <aside class="legend-footnote">
+      <p>
+        <span class="sc">Bethel</span> is the iterative maximum-likelihood strength estimate described in Bethel (2005). A team's strength is the value that, together with every opponent's strength, best explains the observed wins and losses. Geometric mean = 1. Higher is better.
+      </p>
+      <p>
+        <span class="sc">RPI</span> is the classical 0.25·WP + 0.50·OWP + 0.25·OOWP composite, with opponents' win percentages computed exclusive of head-to-head games.
+      </p>
+    </aside>
+  </template>
+
+  <template id="tpl-team">
+    <section class="team-header">
+      <div class="team-header-inner">
+        <p class="kicker" id="t-breadcrumb">
+          <a href="#/">Rankings</a><span aria-hidden="true"> / </span>Team
+        </p>
+        <h1 class="team-name" id="t-name"></h1>
+        <div class="team-stats">
+          <div class="stat">
+            <p class="stat-label">Record</p>
+            <p class="stat-value" id="t-record"></p>
+          </div>
+          <div class="stat">
+            <p class="stat-label">Bethel rank</p>
+            <p class="stat-value" id="t-bethel-rank"></p>
+          </div>
+          <div class="stat">
+            <p class="stat-label">Bethel strength</p>
+            <p class="stat-value" id="t-bethel-val"></p>
+          </div>
+          <div class="stat">
+            <p class="stat-label">RPI rank</p>
+            <p class="stat-value" id="t-rpi-rank"></p>
+          </div>
+          <div class="stat">
+            <p class="stat-label">Win %</p>
+            <p class="stat-value" id="t-wp"></p>
+          </div>
+          <div class="stat">
+            <p class="stat-label">Opp Win %</p>
+            <p class="stat-value" id="t-owp"></p>
+          </div>
+        </div>
+        <div class="season-strip" id="t-strip" aria-label="Season chronology. Each pip is one game."></div>
+        <p class="team-intro" id="t-intro"></p>
+      </div>
+    </section>
+
+    <section class="team-extremes" id="t-extremes">
+      <div class="extreme-column">
+        <h2 class="sc section-title">Wins that helped most</h2>
+        <ol class="extreme-list" id="t-best-wins"></ol>
+      </div>
+      <div class="extreme-column">
+        <h2 class="sc section-title">Losses that hurt most</h2>
+        <ol class="extreme-list" id="t-worst-losses"></ol>
+      </div>
+    </section>
+
+    <section class="team-schedule">
+      <h2 class="sc section-title">Full 2026 schedule</h2>
+      <table class="schedule-table">
+        <thead>
+          <tr>
+            <th class="col-sched-date" scope="col">Date</th>
+            <th class="col-sched-loc" scope="col" aria-label="Home or away"></th>
+            <th class="col-sched-opp" scope="col">Opponent</th>
+            <th class="col-sched-opp-str" scope="col">Opp · Bethel</th>
+            <th class="col-sched-res" scope="col">Result</th>
+            <th class="col-sched-delta" scope="col">Impact</th>
+          </tr>
+        </thead>
+        <tbody id="t-schedule-body"></tbody>
+      </table>
+      <p class="schedule-note" id="t-schedule-note"></p>
+    </section>
+  </template>
+
+  <template id="tpl-compare">
+    <section class="compare-header">
+      <p class="kicker">Head-to-head</p>
+      <h1 class="headline">Compare two teams</h1>
+      <p class="deck">
+        Pick any two Florida teams in the graph. You'll see each team's current position, the Bethel-implied win probability on a neutral site, any games the two played directly, the opponents they share, and how many steps it takes to connect them in the graph.
+      </p>
+    </section>
+
+    <div class="compare-pickers">
+      <div class="team-picker">
+        <label for="pick-a" class="field-label">Team A</label>
+        <input id="pick-a" type="search" class="team-search" placeholder="start typing…" autocomplete="off" data-side="a" spellcheck="false">
+        <div class="team-search-results" id="pick-a-results" role="listbox"></div>
+      </div>
+      <div class="vs-ornament" aria-hidden="true">vs.</div>
+      <div class="team-picker">
+        <label for="pick-b" class="field-label">Team B</label>
+        <input id="pick-b" type="search" class="team-search" placeholder="start typing…" autocomplete="off" data-side="b" spellcheck="false">
+        <div class="team-search-results" id="pick-b-results" role="listbox"></div>
+      </div>
+    </div>
+
+    <div id="compare-body"></div>
+  </template>
+
+  <template id="tpl-method">
+    <article class="long-form">
+      <p class="kicker">Method</p>
+      <h1 class="headline">How these rankings are computed.</h1>
+      <p>
+        The engine implements the iterative maximum-likelihood method Roy Bethel published in <span class="sc">2005</span>, built on the Bradley–Terry–Ford model for paired comparisons. A team's strength <em>s<sub>t</sub></em> is the positive number that, together with every opponent's strength, best explains the observed wins and losses. Concretely, the probability that team A beats team B on a neutral site is
+      </p>
+      <p class="formula">
+        P(A beats B) = <span class="frac"><span class="num">s<sub>A</sub></span><span class="den">s<sub>A</sub> + s<sub>B</sub></span></span>
+      </p>
+      <p>
+        Strengths are estimated by iteration. At each step, every team's strength is recomputed from its wins and the current strength estimates of its opponents; when the estimates stop changing (to within <span class="mono">1e-10</span>), the algorithm terminates. Real-team strengths are then normalized so their geometric mean is 1.
+      </p>
+
+      <h2 class="sc section-title">The Bayesian prior</h2>
+      <p>
+        Undefeated teams drive the pure maximum-likelihood estimate to infinity; winless teams drive it to zero. The engine applies a small Bayesian prior — one fictional win and one fictional loss for every team, against an anchor of strength 1 — which bounds both extremes without materially moving the interior of the ranking. Bethel discusses this adjustment in §8 of the paper.
+      </p>
+
+      <h2 class="sc section-title">Connectivity</h2>
+      <p>
+        The paper's only unsolved issue is graph connectivity: if two teams have no chain of opponents linking them, their relative strength is not defined by the data. The site flags this rather than hides it. On the <a href="#/compare">Compare</a> page, any pair of teams that never played directly shows the shortest chain of shared opponents. When the chain is empty — when the two teams live in different graph components — the comparison is refused rather than guessed.
+      </p>
+
+      <h2 class="sc section-title">Per-game contribution</h2>
+      <p>
+        For teams where it has been computed, the team page shows how each individual game moved that team's strength. The method is leave-one-out: the engine rebuilds strengths from the graph <em>without</em> a single game and reports the difference. A win against a strong opponent contributes more than a win against a weak one; a loss to a weak opponent hurts more than a loss to a strong one.
+      </p>
+
+      <h2 class="sc section-title">What this engine does not do</h2>
+      <ul class="long-list">
+        <li>It does not adjust for home-field advantage. The paper flags this as future work in §8; we respect that boundary.</li>
+        <li>It does not weight recent games more heavily than early-season games.</li>
+        <li>It does not cap margin of victory or incorporate score differential at all — winning percentage doesn't know margin, and Bethel's method is a winning-percentage-compatible estimator.</li>
+        <li>It does not attempt to match any other ranking system's output. The validation target is predictive accuracy on held-out games, not agreement with a different method.</li>
+      </ul>
+
+      <h2 class="sc section-title">Validated on 2026 games</h2>
+      <p>
+        Trained on games before April 1, 2026 and scored on all games from April 1 onward (n ≈ 1,000), this engine picks the winner 76% of the time and has the lowest log-loss of any method tested — including naive winning-percentage baselines and a classical RPI-as-probability proxy. Full methodology in the <a href="https://github.com/Londonberry/open-bethel/blob/main/docs/phase0-findings.md">findings writeup</a>.
+      </p>
+    </article>
+  </template>
+
+  <template id="tpl-about">
+    <article class="long-form">
+      <p class="kicker">About</p>
+      <h1 class="headline">A ranking you can reproduce.</h1>
+      <p>
+        When a ranking decides who makes the playoffs or who earns a seed, that ranking should be something any interested party can reproduce. Today it often isn't. The systems that state athletic associations increasingly rely on are proprietary: the formulas are not published, the inputs are not released in full, and even administrators deferring to the numbers cannot always show their work.
+      </p>
+      <p>
+        open-bethel is an effort to change that — by specifying the math in the open, implementing it in the open, and publishing the inputs, the code, and the outputs together so the result is not a black box but a calculation anyone can re-run.
+      </p>
+      <h2 class="sc section-title">What this site is</h2>
+      <p>
+        A public explainer for the engine. Every ranking links to a team page where each individual game is visible with its date, opponent, opponent's strength, and — for a curated set of teams — how that single game moved the team's rating. Any two teams can be compared with the graph structure laid out explicitly: direct games if any, shared opponents if not, chain length if neither.
+      </p>
+      <h2 class="sc section-title">What you're looking at today</h2>
+      <p id="about-counts"></p>
+      <h2 class="sc section-title">Open, by construction</h2>
+      <p>
+        The ranking engine ships as a Python package, <span class="mono">open-bethel</span>. The input is a generic list of games — <span class="mono">date, home_team, away_team, home_score, away_score</span> — and the output is a deterministic ranking. Nothing about the engine is state-specific or sport-specific; the FHSAA baseball data on this site is an exemplar, not a hard-coding.
+      </p>
+      <p>
+        Source, license, dataset: <a href="https://github.com/Londonberry/open-bethel">github.com/Londonberry/open-bethel</a>.
+      </p>
+    </article>
+  </template>
+
+  <script src="app.js" type="module"></script>
+</body>
+</html>
