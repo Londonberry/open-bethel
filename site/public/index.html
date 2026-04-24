@@ -18,26 +18,19 @@
   <div class="paper-texture" aria-hidden="true"></div>
 
   <header class="masthead">
-    <div class="masthead-inner">
-      <div class="masthead-rail" aria-hidden="true">
-        <span class="rail-ornament">✦</span>
-      </div>
+    <div class="masthead-bar">
       <a href="#/" class="wordmark" aria-label="open-bethel, home">
         <span class="wordmark-open">open</span><span class="wordmark-dot">·</span><span class="wordmark-bethel">bethel</span>
       </a>
-      <p class="masthead-tagline"><em>An open, auditable ranking engine for FHSAA high school baseball.</em></p>
-      <p class="masthead-meta" id="masthead-meta" aria-live="polite"></p>
-    </div>
-
-    <nav class="primary-nav" aria-label="Primary">
-      <div class="primary-nav-inner">
+      <nav class="primary-nav" aria-label="Primary">
         <a href="#/" data-route-match="^/?$">Rankings</a>
         <a href="#/compare" data-route-match="^/compare">Compare</a>
         <a href="#/method" data-route-match="^/method">Method</a>
         <a href="#/about" data-route-match="^/about">About</a>
         <a class="primary-nav-external" href="https://github.com/Londonberry/open-bethel" rel="noopener">Source ↗</a>
-      </div>
-    </nav>
+      </nav>
+    </div>
+    <p class="masthead-meta" id="masthead-meta" aria-live="polite"></p>
   </header>
 
   <main id="app" class="app-main" tabindex="-1">
@@ -59,15 +52,12 @@
   </footer>
 
   <template id="tpl-index">
-    <section class="page-intro">
-      <div class="page-intro-inner">
-        <p class="kicker">Rankings · 2026 season</p>
-        <h1 class="headline">Who is beating whom, and what does that mean?</h1>
-        <p class="deck">
-          Every Florida high school baseball team in the graph — ranked by an iterative maximum-likelihood estimate of relative strength, with classical RPI alongside for comparison. Click any team to see how each of their games moved their number.
-        </p>
-      </div>
-    </section>
+    <div class="page-head">
+      <p class="kicker">Rankings · 2026 FHSAA baseball</p>
+      <p class="page-deck">
+        Bradley-Terry-Ford strengths with classical <span class="sc">rpi</span> alongside. Click any team to see how each game moved their number.
+      </p>
+    </div>
 
     <section class="rankings-controls" aria-label="Filter rankings">
       <div class="control-group control-search">
@@ -187,13 +177,12 @@
   </template>
 
   <template id="tpl-compare">
-    <section class="compare-header">
-      <p class="kicker">Head-to-head</p>
-      <h1 class="headline">Compare two teams</h1>
-      <p class="deck">
-        Pick any two Florida teams in the graph. You'll see each team's current position, the Bethel-implied win probability on a neutral site, any games the two played directly, the opponents they share, and how many steps it takes to connect them in the graph.
+    <div class="page-head">
+      <p class="kicker">Compare</p>
+      <p class="page-deck">
+        Pick any two teams. Direct matchups, shared opponents, graph distance, and the Bethel-implied neutral-site win probability.
       </p>
-    </section>
+    </div>
 
     <div class="compare-pickers">
       <div class="team-picker">
@@ -216,6 +205,14 @@
     <article class="long-form">
       <p class="kicker">Method</p>
       <h1 class="headline">How these rankings are computed.</h1>
+
+      <aside class="tldr" aria-label="Summary">
+        <p class="tldr-label">In one paragraph</p>
+        <p>
+          Bradley–Terry–Ford: every team has one positive number, its <em>strength</em>, and the probability A beats B on a neutral site is <span class="mono">s<sub>A</sub> / (s<sub>A</sub> + s<sub>B</sub>)</span>. Strengths are fit by iteration until wins predicted by the model match wins observed. No margin of victory. No home-field. No recency weighting. One fictional W + one fictional L per team as a Bayesian prior to keep undefeated/winless teams from diverging.
+        </p>
+      </aside>
+
       <p>
         The engine implements the iterative maximum-likelihood method Roy Bethel published in <span class="sc">2005</span>, built on the Bradley–Terry–Ford model for paired comparisons. A team's strength <em>s<sub>t</sub></em> is the positive number that, together with every opponent's strength, best explains the observed wins and losses. Concretely, the probability that team A beats team B on a neutral site is
       </p>
@@ -260,6 +257,14 @@
     <article class="long-form">
       <p class="kicker">About</p>
       <h1 class="headline">A ranking you can reproduce.</h1>
+
+      <aside class="tldr" aria-label="Summary">
+        <p class="tldr-label">In one paragraph</p>
+        <p>
+          Rankings that decide who makes the playoffs should be something anyone can re-run. Today they often aren't — the formulas behind state-athletic-association rankings are typically proprietary and unpublished. <strong>open-bethel</strong> publishes the math, the code, the input data, and the output together.
+        </p>
+      </aside>
+
       <p>
         When a ranking decides who makes the playoffs or who earns a seed, that ranking should be something any interested party can reproduce. Today it often isn't. The systems that state athletic associations increasingly rely on are proprietary: the formulas are not published, the inputs are not released in full, and even administrators deferring to the numbers cannot always show their work.
       </p>
