@@ -1487,12 +1487,17 @@ tr.game-tournament td:first-child {
   html { font-size: 15px; }
   .app-main { padding: var(--space-4) var(--space-3) var(--space-10); }
   .masthead { padding: 0 var(--space-3); }
+  .masthead-bar { gap: var(--space-2); }
+  .wordmark { font-size: 1.25rem; }
+  .primary-nav { font-size: 0.82rem; }
+  .primary-nav a { padding: var(--space-2) 4px; }
 
   .page-head {
     flex-direction: column;
     align-items: flex-start;
     gap: var(--space-1);
   }
+  .page-deck { font-size: 0.95rem; }
 
   .team-stats {
     grid-template-columns: repeat(3, 1fr);
@@ -1500,23 +1505,39 @@ tr.game-tournament td:first-child {
   }
   .stat-value { font-size: 1.05rem; }
 
+  /* Controls — search full-width up top, the four refiners pair into 2x2 below */
   .rankings-controls {
-    grid-template-columns: 1fr;
-    gap: var(--space-2);
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2) var(--space-3);
     padding: var(--space-3);
   }
-  .control-toggle { padding-bottom: 0; }
+  .control-search { grid-column: 1 / -1; }
+  .control-summary { grid-column: 1 / -1; padding: 0; text-align: right; font-size: 0.68rem; }
+  .control-toggle { padding-bottom: 0; align-self: end; }
+  .control-toggle label { font-size: 0.85rem; line-height: 1.2; }
+  .control-select select { padding: 5px 6px; font-size: 0.9rem; }
+  .control-select .field-label,
+  .control-range label { font-size: 0.62rem; margin-bottom: 4px; }
 
-  /* Priority columns only on phone */
-  .col-wp, .col-owp { display: none; }
+  /* Rankings table — show only the four columns that matter on phone */
+  .col-wp, .col-owp, .col-rpi { display: none; }
   .rankings-table { min-width: 0; font-size: 0.9rem; }
   .rankings-table th,
   .rankings-table td { padding: var(--space-2) var(--space-2); }
-  .col-team { font-size: 0.95rem; min-width: 140px; }
+  .col-rank { width: 32px; }
+  .col-team { font-size: 0.95rem; min-width: 0; }
+  td.col-team .team-display { line-height: 1.25; }
+  /* Class chip: smaller, tucked tight to the name */
+  .team-badge { font-size: 0.58rem; padding: 1px 4px; margin-left: 6px; vertical-align: 1px; }
+  /* Strength bar stays but doesn't crowd the cell */
+  .strength-bar { height: 2px; max-width: 80px; }
 
+  /* Schedule — collapse loc into the opp cell visually */
   .schedule-table th,
   .schedule-table td { padding: var(--space-2) var(--space-2); }
-  .col-sched-date { width: 70px; font-size: 0.78rem; }
+  .col-sched-date { width: 60px; font-size: 0.76rem; }
+  .col-sched-loc { width: 18px; padding-right: 0; padding-left: var(--space-1); color: var(--ink-faint); }
+  .col-sched-opp { padding-left: 4px; }
   .delta-cell .delta-bar { display: none; }
 
   .team-stats .stat:nth-child(n+5) { display: none; }
