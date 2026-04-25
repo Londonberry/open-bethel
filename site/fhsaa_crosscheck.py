@@ -42,6 +42,9 @@ MANUAL_SLUG_MAP = {
     "Ransom Everglades (Miami, FL)": "ransom-everglades-raiders",
     "Riviera Prep (Miami, FL)": "riviera-prep-bulldogs",
     "John Carroll Catholic (Fort Pierce, FL)": "john-carroll-catholic-golden-rams",
+    # Disambiguate Jesuit Tampa (4A) — there's a shorter `jesuit` alias slug
+    # in our data that the prefix-match accidentally prefers.
+    "Jesuit (Tampa, FL)": "jesuit-tigers",
 }
 
 

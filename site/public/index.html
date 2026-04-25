@@ -6,6 +6,26 @@
   <title>open-bethel — FHSAA baseball rankings, explained</title>
   <meta name="description" content="An open, auditable ranking engine for FHSAA high school baseball. Every ranking explainable down to the individual game.">
   <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#f7f2e7">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://open-bethel.org/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://open-bethel.org/">
+  <meta property="og:site_name" content="open-bethel">
+  <meta property="og:title" content="open-bethel — FHSAA baseball rankings, explained">
+  <meta property="og:description" content="An open, auditable ranking engine for FHSAA high school baseball. Every ranking explainable down to the individual game.">
+  <meta property="og:image" content="https://open-bethel.org/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="open-bethel — an open, auditable ranking engine">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="open-bethel — FHSAA baseball rankings, explained">
+  <meta name="twitter:description" content="An open, auditable ranking engine for FHSAA high school baseball.">
+  <meta name="twitter:image" content="https://open-bethel.org/og-image.png">
+
   <link rel="stylesheet" href="styles.css">
   <script
     data-goatcounter="https://open-bethel.goatcounter.com/count"
@@ -73,7 +93,7 @@
       <div class="control-group control-select">
         <label for="f-class" class="field-label">FHSAA class</label>
         <select id="f-class">
-          <option value="">All classes</option>
+          <option value="">All FL classes</option>
           <option value="7A">7A</option>
           <option value="6A">6A</option>
           <option value="5A">5A</option>
@@ -83,12 +103,15 @@
           <option value="1A">1A</option>
           <option value="Indep">Independent</option>
           <option value="Rural">Rural</option>
-          <option value="Unk">Unclassified</option>
         </select>
       </div>
       <div class="control-group control-toggle">
         <input id="f-norm" type="checkbox" checked>
         <label for="f-norm">Normalize strength (0–20)</label>
+      </div>
+      <div class="control-group control-toggle">
+        <input id="f-oos" type="checkbox">
+        <label for="f-oos">Include out-of-state</label>
       </div>
       <div class="control-group control-range">
         <label for="f-min">Min. games <span class="val" id="f-min-val">0</span></label>

@@ -11,7 +11,7 @@ const state = {
   teamBySlug: new Map(),
   pairMap: new Map(), // "a|b" (sorted) → hops
   sort: { col: "bethel", dir: "desc" },
-  filters: { search: "", classFilter: "", minGames: 0, normalize: true },
+  filters: { search: "", classFilter: "", minGames: 0, normalize: true, includeOOS: false },
   compare: { a: null, b: null, focusInput: null },
   maxBethel: 0,
 };
@@ -206,6 +206,7 @@ function renderIndex() {
   const search = document.getElementById("f-search");
   const classSelect = document.getElementById("f-class");
   const normToggle = document.getElementById("f-norm");
+  const oosToggle = document.getElementById("f-oos");
   const minGames = document.getElementById("f-min");
   const minGamesVal = document.getElementById("f-min-val");
   const bethelLabel = document.getElementById("th-bethel-label");
@@ -215,6 +216,7 @@ function renderIndex() {
   search.value = state.filters.search;
   classSelect.value = state.filters.classFilter;
   normToggle.checked = state.filters.normalize;
+  oosToggle.checked = state.filters.includeOOS;
   bethelLabel.textContent = state.filters.normalize ? "Bethel·norm" : "Bethel";
   minGames.value = String(state.filters.minGames);
   minGamesVal.textContent = String(state.filters.minGames);
@@ -228,7 +230,7 @@ function renderIndex() {
       tbody.append(tr);
     } else {
       const frag = document.createDocumentFragment();
-      for (const r of rows) frag.append(renderRankingRow(r));
+      rows.forEach((r, i) => frag.append(renderRankingRow(r, i + 1)));
       tbody.append(frag);
     }
     countEl.textContent = `${fmtInt(rows.length)} teams`;
@@ -237,6 +239,7 @@ function renderIndex() {
 
   function filteredSorted() {
     let rows = state.data.rankings.filter((r) => {
+      if (!state.filters.includeOOS && !r.class) return false;
       if (state.filters.classFilter && r.class !== state.filters.classFilter) return false;
       if (r.games < state.filters.minGames) return false;
       if (state.filters.search) {
@@ -256,7 +259,7 @@ function renderIndex() {
     return rows;
   }
 
-  function renderRankingRow(r) {
+  function renderRankingRow(r, displayRank) {
     const tr = el("tr", {
       dataset: { team: r.team },
       onClick: () => {
@@ -264,10 +267,11 @@ function renderIndex() {
       },
     });
 
-    // Rank cell
+    // Rank cell — display position within current filter (1..N), not the
+    // global graph-wide rank. Highlight top-1/top-10 by display position.
     const rankCell = el("td", {
-      class: `col-rank ${r.rank === 1 ? "top-1" : r.rank <= 10 ? "top-10" : ""}`,
-      text: String(r.rank),
+      class: `col-rank ${displayRank === 1 ? "top-1" : displayRank <= 10 ? "top-10" : ""}`,
+      text: String(displayRank),
     });
 
     // Team cell
@@ -330,6 +334,10 @@ function renderIndex() {
     bethelLabel.textContent = state.filters.normalize ? "Bethel·norm" : "Bethel";
     paint();
   });
+  oosToggle.addEventListener("change", (e) => {
+    state.filters.includeOOS = e.target.checked;
+    paint();
+  });
   minGames.addEventListener("input", (e) => {
     state.filters.minGames = Number(e.target.value);
     minGamesVal.textContent = e.target.value;
@@ -375,17 +383,29 @@ function renderTeam(slug) {
     ? new Map(contribs.map((c) => [`${c.winner}|${c.loser}|${c.game_index}`, c.delta]))
     : null;
 
-  // Rank by RPI (for the RPI-rank stat)
-  const rpiRanked = [...state.data.rankings].sort((a, b) => b.rpi - a.rpi);
-  const rpiRank = rpiRanked.findIndex((t) => t.team === slug) + 1;
+  // FL-only ranks: position among in-state teams (those with a class).
+  // Falls back to overall rank for OOS teams.
+  const flTeams = state.data.rankings.filter((t) => t.class);
+  const flCount = flTeams.length;
+  const totalCount = state.data.rankings.length;
+
+  const rpiRankedAll = [...state.data.rankings].sort((a, b) => b.rpi - a.rpi);
+  const rpiRankedFL = rpiRankedAll.filter((t) => t.class);
+  const rpiRank = team.class
+    ? rpiRankedFL.findIndex((t) => t.team === slug) + 1
+    : rpiRankedAll.findIndex((t) => t.team === slug) + 1;
+
+  const bethelRank = team.rank_fl ?? team.rank;
+  const rankDenominator = team.class ? flCount : totalCount;
+  const rankSuffix = team.class ? "FL teams" : "of all teams";
 
   // Header
   document.getElementById("t-name").textContent = displayName(slug);
   document.getElementById("t-breadcrumb").innerHTML = `<a href="#/">Rankings</a><span aria-hidden="true"> / </span>${escapeHtml(displayName(slug))}`;
   document.getElementById("t-record").innerHTML = `${team.wins}–${team.losses}<span class="sub">·${team.games}g</span>`;
-  document.getElementById("t-bethel-rank").innerHTML = `#${team.rank}<span class="sub">of ${fmtInt(state.data.rankings.length)}</span>`;
+  document.getElementById("t-bethel-rank").innerHTML = `#${bethelRank}<span class="sub">of ${fmtInt(rankDenominator)} ${rankSuffix}</span>`;
   document.getElementById("t-bethel-val").textContent = fmtNum(displayStrength(team), 2);
-  document.getElementById("t-rpi-rank").innerHTML = `#${rpiRank}<span class="sub">of ${fmtInt(state.data.rankings.length)}</span>`;
+  document.getElementById("t-rpi-rank").innerHTML = `#${rpiRank}<span class="sub">of ${fmtInt(rankDenominator)} ${rankSuffix}</span>`;
   document.getElementById("t-wp").textContent = team.wp.toFixed(3);
   document.getElementById("t-owp").textContent = team.owp.toFixed(3);
 
@@ -468,7 +488,7 @@ function renderExtremeItem(c, slug, kind) {
   left.append(document.createTextNode(displayName(opp)));
   if (oppTeam) {
     const small = el("small", {
-      text: `#${oppTeam.rank} · Bethel ${fmtNum(displayStrength(oppTeam), 2)}`,
+      text: `#${oppTeam.rank_fl ?? oppTeam.rank} · Bethel ${fmtNum(displayStrength(oppTeam), 2)}`,
     });
     left.append(small);
   }
@@ -567,8 +587,12 @@ function buildIntroLine(team, rpiRank, games, contribs) {
   const wins = games.filter((g) => g.result === "W").length;
   const losses = games.filter((g) => g.result === "L").length;
   const tournGames = games.filter((g) => g.game_type !== "regular").length;
+  const flCount = state.data.rankings.filter((t) => t.class).length;
+  const denom = team.class ? flCount : state.data.rankings.length;
+  const suffix = team.class ? "FL teams" : "teams";
+  const bethelRank = team.rank_fl ?? team.rank;
   const parts = [];
-  parts.push(`Ranked #${team.rank} of ${fmtInt(state.data.rankings.length)} by Bethel; #${rpiRank} by RPI.`);
+  parts.push(`Ranked #${bethelRank} of ${fmtInt(denom)} ${suffix} by Bethel; #${rpiRank} by RPI.`);
   parts.push(`${wins}-${losses} across ${games.length} games${tournGames > 0 ? `, ${tournGames} in postseason play` : ""}.`);
   if (contribs && contribs.length > 0) {
     const net = contribs.reduce((a, c) => a + c.delta, 0);
@@ -653,7 +677,7 @@ function renderCompare(slugA, slugB) {
         });
         resEl.append(
           el("span", { class: "result-name", text: displayName(r.team) }),
-          el("span", { class: "result-meta", text: `#${r.rank} · ${r.wins}-${r.losses}` }),
+          el("span", { class: "result-meta", text: `#${r.rank_fl ?? r.rank} · ${r.wins}-${r.losses}` }),
         );
         resultsEl.append(resEl);
       });
@@ -781,7 +805,7 @@ function renderCompareTeamBlock(team, label) {
         style: { color: "inherit", textDecoration: "none" },
       }),
     ]),
-    el("p", { class: "cteam-meta", text: `#${team.rank} · ${team.wins}–${team.losses} · Win% ${team.wp.toFixed(3)}` }),
+    el("p", { class: "cteam-meta", text: `#${team.rank_fl ?? team.rank} · ${team.wins}–${team.losses} · Win% ${team.wp.toFixed(3)}` }),
     el("p", { class: "cteam-strength", text: fmtNum(displayStrength(team), 3) }),
   );
   return block;

@@ -180,6 +180,14 @@ def main() -> None:
     for i, r in enumerate(rankings, 1):
         r["rank"] = i
 
+    # FL-only rank: position within in-state teams (those with an FHSAA class
+    # assignment). OOS teams keep r["rank"] for math but have no rank_fl.
+    fl_rank = 0
+    for r in rankings:
+        if r.get("class"):
+            fl_rank += 1
+            r["rank_fl"] = fl_rank
+
     # Normalized strength: log-compresses the unbounded raw Bethel onto a
     # bounded scale so the top team lands at NORM_TOP. Order is preserved
     # (transform is monotonic). Anchored to the raw maximum.
