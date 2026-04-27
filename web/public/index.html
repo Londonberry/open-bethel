@@ -31,6 +31,7 @@
     <a class="wordmark" href="/" aria-label="open-bethel, home">open-bethel</a>
     <nav class="primary-nav" aria-label="Primary">
       <a href="#method">Method</a>
+      <a href="#examples">Examples</a>
       <a href="#use">Use</a>
       <a href="#adopt">Adopt</a>
       <a href="https://github.com/Londonberry/open-bethel" rel="noopener">GitHub <span aria-hidden="true">↗</span></a>
@@ -82,6 +83,68 @@
       <h2>The method</h2>
       <p>The core method is the iterative Bradley-Terry-Ford strength rating with a Bayesian prior, derived in <a href="https://fliphtml5.com/sdyu/suvz/basic" rel="noopener"><em>An Optimal Value for the Bradley-Terry Model for Estimating Strength-of-Schedule</em></a> (Roy Bethel, MITRE Corporation, <span class="num">2005</span>). The test suite reproduces the paper's Table 2 — converged strengths for all <span class="num">31</span> NFL teams after the <span class="num">1999</span> regular season — to four decimal places given the same 248-game schedule, so the implementation is verifiable against a published ground truth, not just self-consistent.</p>
       <p>The algorithm is dependency-free Python — standard library only. The full essay walking through the math, the failure modes, and the parameter decisions lives in <a href="https://github.com/Londonberry/open-bethel/blob/main/docs/bethel-essence.md" rel="noopener">docs/bethel-essence.md</a>.</p>
+    </section>
+
+    <section id="examples">
+      <h2>Examples</h2>
+      <p>Two end-to-end runs. The first reproduces the published reference; the second is a current high-school season.</p>
+
+      <h3 class="example-heading">1999 NFL regular season</h3>
+      <p>Bethel's <span class="num">2005</span> paper publishes converged Bradley-Terry-Ford strengths for all <span class="num">31</span> NFL teams after the <span class="num">1999</span> regular season (Table 2). Running open-bethel on the same <span class="num">248</span>-game schedule recovers his table to four decimals — every team, every position. The test suite asserts this on every commit.</p>
+      <figure class="ranking">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col" class="r">Rank</th>
+              <th scope="col">Team</th>
+              <th scope="col" class="r">W-L</th>
+              <th scope="col" class="r">Strength</th>
+              <th scope="col" class="r">Bethel '05</th>
+              <th scope="col" class="r">RPI</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="r num">1</td><td>Indianapolis</td><td class="r num">13-3</td><td class="r num">6.9927</td><td class="r num soft">6.9927</td><td class="r num">.594</td></tr>
+            <tr><td class="r num">2</td><td>Jacksonville</td><td class="r num">14-2</td><td class="r num">5.0117</td><td class="r num soft">5.0117</td><td class="r num">.553</td></tr>
+            <tr><td class="r num">3</td><td>Buffalo</td><td class="r num">11-5</td><td class="r num">3.8538</td><td class="r num soft">3.8538</td><td class="r num">.581</td></tr>
+            <tr><td class="r num">4</td><td>Tennessee</td><td class="r num">13-3</td><td class="r num">3.7348</td><td class="r num soft">3.7348</td><td class="r num">.557</td></tr>
+            <tr><td class="r num">5</td><td>Miami</td><td class="r num">9-7</td><td class="r num">2.5624</td><td class="r num soft">2.5624</td><td class="r num">.557</td></tr>
+            <tr><td class="r num">6</td><td>Tampa Bay</td><td class="r num">11-5</td><td class="r num">2.2356</td><td class="r num soft">2.2356</td><td class="r num">.535</td></tr>
+            <tr><td class="r num">7</td><td>NY Jets</td><td class="r num">8-8</td><td class="r num">2.1129</td><td class="r num soft">2.1129</td><td class="r num">.552</td></tr>
+            <tr><td class="r num">8</td><td>St. Louis</td><td class="r num">13-3</td><td class="r num">2.0762</td><td class="r num soft">2.0762</td><td class="r num">.519</td></tr>
+            <tr class="sep"><td class="r num">⋮</td><td colspan="5" class="soft">23 teams omitted; full results in tests/test_bethel_nfl_1999.py</td></tr>
+            <tr><td class="r num">29</td><td>San Francisco</td><td class="r num">4-12</td><td class="r num">0.1591</td><td class="r num soft">0.1591</td><td class="r num">.415</td></tr>
+            <tr><td class="r num">30</td><td>New Orleans</td><td class="r num">3-13</td><td class="r num">0.1062</td><td class="r num soft">0.1062</td><td class="r num">.399</td></tr>
+            <tr><td class="r num">31</td><td>Cleveland</td><td class="r num">2-14</td><td class="r num">0.0830</td><td class="r num soft">0.0830</td><td class="r num">.410</td></tr>
+          </tbody>
+        </table>
+        <figcaption>Strengths normalized so the geometric mean over real teams is <span class="num">1</span>. <em>Bethel '05</em> is the published reference value from Table 2; <em>Strength</em> is what open-bethel computes today. <em>RPI</em> is the classical <span class="num">25/50/25</span> blend, shown for comparison.</figcaption>
+      </figure>
+
+      <h3 class="example-heading">FHSAA Class 2A Region 1 District 3 — baseball, 2026</h3>
+      <p>The five schools in northeast Florida's Class 2A District 3: Bishop Snyder, Bolles, Episcopal, Providence, and Trinity Christian. The run uses the full Florida high-school baseball graph for the <span class="num">2026</span> season — <span class="num">7,085</span> games across <span class="num">951</span> teams — so strength-of-schedule chains extend through every opponent and every opponent's opponents statewide. The table below shows the five district members; the rightmost column is each team's rank against all <span class="num">951</span> Florida programs.</p>
+      <figure class="ranking">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col" class="r">Rank</th>
+              <th scope="col">Team</th>
+              <th scope="col" class="r">W-L</th>
+              <th scope="col" class="r">Strength</th>
+              <th scope="col" class="r">RPI</th>
+              <th scope="col" class="r">State rk</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="r num">1</td><td>Trinity Christian</td><td class="r num">20-7</td><td class="r num">18.8315</td><td class="r num">.659</td><td class="r num">19</td></tr>
+            <tr><td class="r num">2</td><td>Bishop Snyder</td><td class="r num">19-6</td><td class="r num">14.2762</td><td class="r num">.621</td><td class="r num">30</td></tr>
+            <tr><td class="r num">3</td><td>Bolles</td><td class="r num">18-7</td><td class="r num">9.7697</td><td class="r num">.611</td><td class="r num">54</td></tr>
+            <tr><td class="r num">4</td><td>Episcopal</td><td class="r num">17-10</td><td class="r num">5.0386</td><td class="r num">.567</td><td class="r num">107</td></tr>
+            <tr><td class="r num">5</td><td>Providence</td><td class="r num">13-12</td><td class="r num">4.9520</td><td class="r num">.578</td><td class="r num">113</td></tr>
+          </tbody>
+        </table>
+        <figcaption>Run with the default Bayesian prior (<code>prior_games=1</code>); converged in <span class="num">588</span> iterations. The district order tracks what happened on the field: Trinity Christian beat Bishop Snyder <span class="num">11-10</span> in the district final on <span class="num">2026-04-17</span>, and the two are the closest pair in the table. See the <a href="https://github.com/Londonberry/open-bethel/blob/main/docs/bethel-essence.md" rel="noopener">essay</a> for why a small Bayesian prior matters when graphs include thinly-connected teams.</figcaption>
+      </figure>
     </section>
 
     <section id="use">

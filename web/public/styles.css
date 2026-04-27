@@ -244,6 +244,101 @@ dd code {
 }
 
 /* ------------------------------------------------------------------ */
+/* Ranking tables                                                      */
+/* ------------------------------------------------------------------ */
+
+.example-heading {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 2.25rem 0 0.85rem;
+  color: var(--ink);
+  letter-spacing: 0;
+  text-transform: none;
+  border: 0;
+  padding: 0;
+}
+
+.ranking {
+  margin: 0 0 1rem;
+  padding: 0;
+}
+
+.ranking table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: lining-nums tabular-nums;
+  font-size: 0.92rem;
+  margin-bottom: 0.75rem;
+}
+
+.ranking thead th {
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  padding: 0.4rem 0.6rem 0.35rem 0;
+  border-bottom: 1px solid var(--ink);
+  white-space: nowrap;
+}
+
+.ranking tbody td {
+  padding: 0.32rem 0.6rem 0.32rem 0;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: baseline;
+}
+
+.ranking tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.ranking tbody td:last-child,
+.ranking thead th:last-child {
+  padding-right: 0;
+}
+
+.ranking .r {
+  text-align: right;
+}
+
+.ranking .num {
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.ranking .soft {
+  color: var(--ink-soft);
+}
+
+.ranking tr.sep td {
+  font-size: 0.82rem;
+  padding-top: 0.45rem;
+  padding-bottom: 0.45rem;
+  color: var(--ink-soft);
+}
+
+.ranking figcaption {
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  margin-top: 0.4rem;
+}
+
+.ranking figcaption code {
+  font-size: 0.82rem;
+}
+
+@media (max-width: 32rem) {
+  .ranking table {
+    font-size: 0.86rem;
+  }
+  .ranking thead th,
+  .ranking tbody td {
+    padding-right: 0.4rem;
+  }
+}
+
+/* ------------------------------------------------------------------ */
 /* Footer                                                              */
 /* ------------------------------------------------------------------ */
 
