@@ -1,0 +1,282 @@
+/*
+ * open-bethel.org — minimalist marketing site.
+ * Inspired by academic press, government documentation, and serious
+ * journals. No build step, no JS, no external fonts.
+ */
+
+:root {
+  --bg: #faf9f5;
+  --ink: #14171c;
+  --ink-soft: #4a5260;
+  --rule: #d9d3c4;
+  --code-bg: #efece4;
+  --link: #1d3a5f;
+  --link-hover: #0d2540;
+  --measure: 38rem;
+  --gap: 2.75rem;
+  --gap-large: 4.5rem;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 17px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-feature-settings: "kern", "liga", "calt", "ss01";
+  font-variant-numeric: oldstyle-nums proportional-nums;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: var(--ink);
+  color: var(--bg);
+}
+
+a {
+  color: var(--link);
+  text-decoration: underline;
+  text-decoration-thickness: 0.06em;
+  text-underline-offset: 0.2em;
+  transition: color 120ms ease;
+}
+
+a:hover {
+  color: var(--link-hover);
+  text-decoration-thickness: 0.1em;
+}
+
+/* ------------------------------------------------------------------ */
+/* Masthead                                                            */
+/* ------------------------------------------------------------------ */
+
+.masthead {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 2rem 1.5rem 1.25rem;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 2rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.wordmark {
+  font-family: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, Consolas,
+    monospace;
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.wordmark:hover {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.primary-nav {
+  display: flex;
+  gap: 1.5rem;
+  font-size: 0.95rem;
+}
+
+.primary-nav a {
+  color: var(--ink-soft);
+  text-decoration: none;
+}
+
+.primary-nav a:hover {
+  color: var(--ink);
+}
+
+@media (max-width: 32rem) {
+  .masthead {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  .primary-nav {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Main                                                                */
+/* ------------------------------------------------------------------ */
+
+main {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: var(--gap-large) 1.5rem 0;
+}
+
+main section {
+  margin-bottom: var(--gap-large);
+}
+
+main section:last-child {
+  margin-bottom: var(--gap);
+}
+
+.hero h1 {
+  font-size: clamp(1.7rem, 4.4vw, 2.4rem);
+  line-height: 1.18;
+  letter-spacing: -0.015em;
+  font-weight: 600;
+  margin: 0 0 1.5rem;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+.lede {
+  font-size: 1.125rem;
+  line-height: 1.55;
+  margin: 0;
+  color: var(--ink);
+}
+
+.lede strong {
+  font-weight: 600;
+}
+
+h2 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin: 0 0 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+p {
+  margin: 0 0 1rem;
+}
+
+p:last-child {
+  margin-bottom: 0;
+}
+
+em {
+  font-style: italic;
+}
+
+.num {
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+/* Definition-list-style feature blocks */
+
+.features {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1.5rem;
+}
+
+.features > div {
+  margin: 0;
+}
+
+.features dt {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--ink);
+  margin-bottom: 0.25rem;
+}
+
+.features dd {
+  margin: 0;
+  color: var(--ink);
+  line-height: 1.6;
+}
+
+/* Code blocks */
+
+pre {
+  background: var(--code-bg);
+  color: var(--ink);
+  padding: 0.95rem 1.1rem;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  margin: 0 0 1rem;
+  overflow-x: auto;
+  font-family: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, Consolas,
+    monospace;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+pre code {
+  background: transparent;
+  padding: 0;
+  border: 0;
+  font-size: inherit;
+  font-family: inherit;
+}
+
+p code,
+li code,
+dd code {
+  background: var(--code-bg);
+  padding: 0.05em 0.35em;
+  border-radius: 3px;
+  font-family: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, Consolas,
+    monospace;
+  font-size: 0.88em;
+}
+
+/* ------------------------------------------------------------------ */
+/* Footer                                                              */
+/* ------------------------------------------------------------------ */
+
+.site-footer {
+  max-width: var(--measure);
+  margin: var(--gap) auto 0;
+  padding: var(--gap) 1.5rem 3rem;
+  border-top: 1px solid var(--rule);
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+
+.site-footer p {
+  margin: 0 0 0.4rem;
+}
+
+.site-footer p:last-child {
+  margin-bottom: 0;
+}
+
+.site-footer .colophon {
+  font-family: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, Consolas,
+    monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  color: var(--ink-soft);
+  margin-top: 0.6rem;
+}
+
+.site-footer a {
+  color: var(--ink-soft);
+}
+
+.site-footer a:hover {
+  color: var(--ink);
+}

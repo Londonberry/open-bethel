@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://open-bethel.org/sitemap.xml

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>open-bethel — a transparent ranking engine for sports teams</title>
+  <meta name="description" content="An open, auditable strength-rating engine for sports teams. Reproducible. Peer-reviewed. MIT licensed. Free for state athletic associations and tournament directors to adopt." />
+  <meta name="color-scheme" content="light" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://open-bethel.org/" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://open-bethel.org/" />
+  <meta property="og:site_name" content="open-bethel" />
+  <meta property="og:title" content="open-bethel — a transparent ranking engine for sports teams" />
+  <meta property="og:description" content="Reproducible strength ratings, classical RPI, and per-game contributions. Peer-reviewed math. MIT licensed. Free to adopt." />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="open-bethel — a transparent ranking engine for sports teams" />
+  <meta name="twitter:description" content="Reproducible strength ratings, classical RPI, and per-game contributions. Peer-reviewed math. MIT licensed." />
+
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="masthead">
+    <a class="wordmark" href="/" aria-label="open-bethel, home">open-bethel</a>
+    <nav class="primary-nav" aria-label="Primary">
+      <a href="#method">Method</a>
+      <a href="#use">Use</a>
+      <a href="#adopt">Adopt</a>
+      <a href="https://github.com/Londonberry/open-bethel" rel="noopener">GitHub <span aria-hidden="true">↗</span></a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>An open ranking engine your state association can adopt.</h1>
+      <p class="lede">
+        <strong>open-bethel</strong> computes strength ratings, strength of schedule, and per-game contributions for sports teams from a list of head-to-head results. The math is published and peer-reviewed. The implementation is short enough to read in an afternoon. The license is MIT.
+      </p>
+    </section>
+
+    <section>
+      <h2>What it produces</h2>
+      <dl class="features">
+        <div>
+          <dt>Strength ratings</dt>
+          <dd>Each team gets a single number reflecting how strong its results show it to be, accounting for opponent quality. Derived by maximum likelihood under the Bradley-Terry model with a Bayesian prior so low-data and disconnected graphs stay well-behaved.</dd>
+        </div>
+        <div>
+          <dt>Classical RPI</dt>
+          <dd>The traditional <span class="num">25/50/25</span> blend of win percentage, opponents' win percentage, and opponents' opponents' win percentage. Reported alongside the strength rating for direct comparison with established formulas.</dd>
+        </div>
+        <div>
+          <dt>Per-game contributions</dt>
+          <dd>For any team, a leave-one-out decomposition of which games raised the rating and which lowered it, sorted by impact. Lets a coach, AD, or journalist answer <em>which win mattered most?</em> with arithmetic, not narrative.</dd>
+        </div>
+        <div>
+          <dt>Pairwise diagnostics</dt>
+          <dd>For any two teams, the level of indirection between them in the head-to-head graph. Surfaces when a comparison is well-grounded versus when it relies on long inferential chains — a transparency the formula owes to the people it ranks.</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section>
+      <h2>Who it's for</h2>
+      <p>State athletic associations, conferences, and tournament directors who want a defensible, reproducible seeding mechanism instead of a proprietary number nobody can audit. Statisticians, athletic directors, coaches, and reporters who need to show their work. Anyone who has to explain a ranking to the people it affects.</p>
+    </section>
+
+    <section>
+      <h2>Why it exists</h2>
+      <p>Ranking decisions decide who makes the playoffs, who earns a seed, and who is left out. Those decisions deserve to be reproducible by the parties affected. Many of the systems state associations now defer to are proprietary: the formula is not published, the inputs are not released in full, and even administrators applying the numbers cannot always show their work.</p>
+      <p>open-bethel is the alternative: specified in the open, implemented in the open, free for anyone to run.</p>
+    </section>
+
+    <section id="method">
+      <h2>The method</h2>
+      <p>The core method is the iterative Bradley-Terry-Ford strength rating with a Bayesian prior, derived in <a href="https://fliphtml5.com/sdyu/suvz/basic" rel="noopener"><em>An Optimal Value for the Bradley-Terry Model for Estimating Strength-of-Schedule</em></a> (Roy Bethel, MITRE Corporation, <span class="num">2005</span>). The test suite reproduces the paper's Table 2 — converged strengths for all <span class="num">31</span> NFL teams after the <span class="num">1999</span> regular season — to four decimal places given the same 248-game schedule, so the implementation is verifiable against a published ground truth, not just self-consistent.</p>
+      <p>The algorithm is dependency-free Python — standard library only. The full essay walking through the math, the failure modes, and the parameter decisions lives in <a href="https://github.com/Londonberry/open-bethel/blob/main/docs/bethel-essence.md" rel="noopener">docs/bethel-essence.md</a>.</p>
+    </section>
+
+    <section id="use">
+      <h2>Use</h2>
+      <p>Install:</p>
+      <pre><code>pip install open-bethel</code></pre>
+      <p>Library:</p>
+      <pre><code>from open_bethel import bethel_strengths, classical_rpi, load_games
+
+teams, games = load_games("games.csv")
+strengths, iters, converged = bethel_strengths(teams, games)</code></pre>
+      <p>Or from the command line:</p>
+      <pre><code>open-bethel-rank      games.csv  team-a  team-b
+open-bethel-validate  games.csv  2026-04-01
+open-bethel-diagnose  games.csv</code></pre>
+      <p>The CSV expects one row per game with columns <code>date, home_team, away_team, home_score, away_score</code>. Team identifiers are free-form. Tied games are dropped — the model is undefined for ties.</p>
+    </section>
+
+    <section id="adopt">
+      <h2>Adopt</h2>
+      <p>open-bethel is MIT licensed and dependency-free. There is nothing to license, nothing to procure, no per-school fee. A state association, conference, or tournament director can run it on its own infrastructure with no commercial relationship and no recurring cost. Source, issues, and discussion live at <a href="https://github.com/Londonberry/open-bethel" rel="noopener">github.com/Londonberry/open-bethel</a>.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>
+      open-bethel is named for Roy Bethel, whose <span class="num">2005</span> paper on the Bradley-Terry-Ford model is the mathematical foundation implemented here.
+    </p>
+    <p class="colophon">
+      MIT licensed · <a href="https://github.com/Londonberry/open-bethel" rel="noopener">github.com/Londonberry/open-bethel</a>
+    </p>
+  </footer>
+</body>
+</html>
